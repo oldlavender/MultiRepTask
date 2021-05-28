@@ -1,0 +1,19 @@
+<header class="content-vertical-center content-horizontal-center" 
+        style="background-color: ${parameters.bgColor}; color: ${parameters.fgColor};">
+    <div>
+      <h1>${parameters.fbTitle}</h1>
+    </div>
+  </header>
+  <main style="background-color: ${parameters.bgColor}; color: ${parameters.fgColor};">
+    <p>Sua Resposta: ${parameters.fbAnswered}</p>
+    <p>Resposta Correta: ${parameters.fbExpected}</p>
+    <p>${parameters.fbMessage}</p>
+    <p></p>
+    <p>Voc&ecirc; usou ${parameters.responseTime} dos 5 segundos dispon&iacute;veis.</p>
+    <p></p>
+    <p>Pressione <kbd>Espa&ccedil;o</kbd> quando estiver pronto para avan&ccedil;ar!</p>
+  </main>
+  <footer class="content-vertical-center content-horizontal-center" 
+          style="background-color: ${parameters.bgColor}; color: ${parameters.fgColor};">
+        <kbd id='space' style="width: 75%;">Espa&ccedil;o</kbd>
+  </footer>
