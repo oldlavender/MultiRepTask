@@ -1,0 +1,28 @@
+{
+  "name": "multireptest",
+  "version": "0.0.1",
+  "description": "Experimental test for multiple cognitive representations (frames) for the same world information",
+  "main": "MultiRepTest.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "dependencies": {
+    "lab.js": "^20.2.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "experiment",
+    "lab.js",
+    "move.lab",
+    "frame",
+    "semantics",
+    "schemata",
+    "cognitive",
+    "science"
+  ],
+  "author": "Bruno Moreira Guedes <moreira.guedes@estudante.uffs.edu.br>",
+  "license": "AGPL-3.0"
+}

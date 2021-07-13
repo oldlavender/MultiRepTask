@@ -19,10 +19,10 @@ var randGen = new lab.util.Random();
 
 const namuAngles = rangeArray(15, 75);
 const bonhoAngles = rangeArray(90+15, 90+75);
-const namu_p1Widths = rangeArray(65, 90);
-const bonho_p1Widths = rangeArray(105, 130);
-const namu_p2Widths = rangeArray(35, 55);
-const bonho_p2Widths = rangeArray(85, 105);
+const namu_p1Widths = rangeArray(65, 90); //ellipse
+const bonho_p1Widths = rangeArray(105, 130); //ellipse
+const namu_p2Widths = rangeArray(35, 55); //rect
+const bonho_p2Widths = rangeArray(85, 105); //rect
 // old approach with lines, kept for compatibility
 // will be removed soon
 var namuStrokeWidth = rangeArray(3, 6);

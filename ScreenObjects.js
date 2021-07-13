@@ -118,18 +118,6 @@ export const RawScreenObjects = {
             },
             object: 
             {
-                line_template: { 
-                    //obsolete, old lines replaced by ellipse+rectangle
-                    //kept meanwhile for compatibility reasons, will be removed
-                    id: 'Object',
-                    type: 'line',
-                    left: 0,
-                    top: 0,
-                    width: 100,
-                    angle: '${ parameters.angle }',
-                    strokeWidth: '${ parameters.strokeWidth }',
-                    stroke: "rgb(0,0,0)",
-                },
                 ellipse_template: {
                     id: 'Object_p1',
                     type: 'ellipse',
