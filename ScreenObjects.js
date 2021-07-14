@@ -1,13 +1,12 @@
 import "./lib/lab.js";
 import "./lib/lab.fallback.js";
+import { Handlers, Revision } from "./Handlers.js";
 
-export var Revision = {
-    ScreenObjects: {
-        major: 0,
-        minor: 2,
-        rev: 57,
-        timestamp: '2021-06-08 6:38PM',
-    },
+Revision.ScreenObjects = {
+    major: 0,
+    minor: 3,
+    rev: 18,
+    timestamp: '2021-07-14 1:12AM',
 };
 
 export const RawScreenObjects = {
@@ -123,7 +122,7 @@ export const RawScreenObjects = {
                     type: 'ellipse',
                     left: 0,
                     top: 0,
-                    width: '${parameters.p1Width}', //changed from fixed 140
+                    width: '${parameters.data.ellipseWidth}', //changed from fixed 140
                     height: 20,
                     //strokeWidth: 1,
                     stroke: 'rgb(255,255,255)',
@@ -131,7 +130,9 @@ export const RawScreenObjects = {
                     angle: 45
                     //angle: '${parameters.p1Angle}', //kept for log purposes 
                 },
-                ellipse_template2: { //experimental, trying with two ellipses
+                ellipse_template2: { 
+                    // @TODO: Remove it when it's safe
+                    //experimental, trying with two ellipses
                     id: 'Object_p2',
                     type: 'ellipse',
                     left: 0,
@@ -146,7 +147,7 @@ export const RawScreenObjects = {
                     type: 'rect', //rectangle
                     left: 0,
                     top: 0,
-                    width: '${parameters.p2Width}',
+                    width: '${parameters.data.rectangleWidth}',
                     height: '25',
                     fill: 'black',
                     angle: 45+90,
@@ -262,8 +263,69 @@ export const RawScreenObjects = {
             responses: {
                 'keypress(d)': 'namu',
                 'keypress(f)': 'bonho',
-                'click @left': 'namu',
-                'click @right': 'bonho',
+                // DISABLED: used for mobile, but mobile was deactivated for
+                // accuracy reasons (it didn't precisely registered RTs)
+                //'click @left': 'namu',
+                //'click @right': 'bonho',
+            },
+        },
+    },
+    wugtug: {
+        contents: {
+            answer_labels: {
+                wug_buttonlabel: {
+                    id: 'namu_buttonlabel', //left
+                    type: 'i-text',
+                    left: -350,
+                    top: 135,
+                    fontSize: 20,
+                    text: 'Wug',
+                    fill: '#000000',
+                    stroke: '#000000',
+                },
+                tug_buttonlabel: {
+                    id: 'bonho_buttonlabel', //left
+                    type: 'i-text',
+                    left: 350,
+                    top: 135,
+                    fontSize: 20,
+                    text: 'Tug',
+                    fill: '#000000',
+                    stroke: '#000000',
+                },
+            },
+            object: {
+                image_center: {
+                    id: 'wugtug_image',
+                    type: 'image',
+                    left: 0,
+                    top: 0,
+                    src: '${parameters.data.image.filename}',
+                    width: '${parameters.data.image.width}',
+                    height: '${parameters.data.image.height}',
+                    fill: '${parameters.data.colorRgbHex}'
+                },
+                bg_square: {
+                    id: 'wugtug_bg_square',
+                    type: 'rect',
+                    left: 0,
+                    top: 0,
+                    width: '${ parameters.data.image.width - 1 }',
+                    height: '${ parameters.data.image.height - 1 }',
+                    fill: '${parameters.data.colorRgbHex}',
+                    //angle: 45+90,
+                },
+            },
+        },
+        feedback_screen: {},
+        properties: {
+            responses: {
+                'keypress(d)': 'wug',
+                'keypress(f)': 'tug',
+                // DISABLED: used for mobile, but mobile was deactivated for
+                // accuracy reasons (it didn't precisely registered RTs)
+                //'click @left': 'namu',
+                //'click @right': 'bonho',
             },
         },
     },
@@ -313,31 +375,140 @@ export const ScreenObjects = {
     templates: {
         generic: {
             fxcross: {
-                center_canvas: () => new lab.canvas.Screen({
-                    title: 'fxcross',
+                center_canvas: (
+                    oTitle='fxcross',
+                    oTimeout=500,
+                    oContent=RawScreenObjects.fxcross.center
+                ) => new lab.canvas.Screen({
+                    title: oTitle,
                     datacommit: false,
-                    timeout: 500,
+                    timeout: oTimeout,
                     viewport: [800, 600],
-                    content: RawScreenObjects.fxcross.center,
+                    content: oContent,
                 }),
+            },
+            canvas: {
+                task_canvas: (
+                    oContent=[],
+                    oResponses={},
+                    oTitle='untitled-canvas',
+                    oMsgHandlers={},
+                    oTimeout=5000
+                ) => new lab.canvas.Screen({
+                    title: oTitle,
+                    timeout: oTimeout,
+                    viewport: [800, 600],
+                    responses: oResponses,
+                    messageHandlers: oMsgHandlers,
+                    content: oContent,
+                }),
+                feedback_screen: function(
+                    addContents=[],
+                    oMsgHandlers={
+                        'before:prepare': Handlers.handlers.generic.fb_before_prepare,
+                    }
+                )
+                {
+                    let content, fixed = [
+                        RawScreenObjects.namubonho.feedback_screen.objects.background,
+                        RawScreenObjects.namubonho.feedback_screen.objects.correctResponse_label,
+                        RawScreenObjects.namubonho.feedback_screen.objects.correctResponse_value,
+                        RawScreenObjects.namubonho.feedback_screen.objects.status_message,
+                        RawScreenObjects.namubonho.feedback_screen.objects.hint_message,
+                        RawScreenObjects.namubonho.feedback_screen.objects.response_label,
+                        RawScreenObjects.namubonho.feedback_screen.objects.response_value,
+                        RawScreenObjects.namubonho.feedback_screen.objects.time_label,
+                        RawScreenObjects.namubonho.feedback_screen.objects.time_value,
+                        RawScreenObjects.namubonho.feedback_screen.objects.title,
+                        RawScreenObjects.namubonho.contents.object.ellipse_template,
+                        RawScreenObjects.namubonho.contents.object.rectangle_template,
+                    ];
+                    content =fixed.concat(addContents);
+                    //addContents.forEach(i => content.push(i));
+                    return new lab.canvas.Screen({
+                        title: 'feedbackScreen_namubonho',
+                        viewport: [800, 600],
+                        responses: RawScreenObjects.generic.responses.standard_noninput,
+                        tardy: true,
+                        datacommit: false,
+                        parameters: { //provides default values
+                            bgColor: 'black',
+                            fgColor: 'white',
+                            fbTitle: 'RESPOSTA INDETERMINADA',
+                            fbStatusMessage: 'não pode ter sua assertividade determinada',
+                            fbHintMessage: 'Não é possível fazer recomendações para as',
+                            fbAnswered: '<Sem Resposta>',
+                            fbExpected: '<Resposta Correta Oculta>',
+                            responseTime: 5,
+                            screenWidth: 800,
+                            screenHeight: 600,
+                        },
+                        content: content,
+                        messageHandlers: oMsgHandlers,
+                    });
+                },
             },
             pages: {
                 html_page: (
-                    url, 
-                    commit=false, 
-                    resp=RawScreenObjects.generic.responses.standard_noninput) => 
+                    oUrl,
+                    oParameters={},
+                    oMessageHandlers={},
+                    oCommit=false, 
+                    oResp=RawScreenObjects.generic.responses.standard_noninput) => 
                         new lab.html.Screen({
-                            contentUrl: url,
-                            datacommit: commit,
-                            responses: resp,
-                            title: url,
+                            contentUrl: oUrl,
+                            datacommit: oCommit,
+                            responses: oResp,
+                            title: oUrl,
+                            parameters: oParameters,
+                            messageHandlers: oMessageHandlers,
+                }),
+            },
+            flow: {
+                sequence: (
+                    oContent=[],
+                    oTitle='unamed_seq',
+                    oCommit=false
+                ) => new lab.flow.Sequence({
+                    title: oTitle,
+                    datacommit: oCommit,
+                    content: oContent,
+                }),
+                advanced_seq: (
+                    oContent=[],
+                    oTitle='unamed_seq',
+                    oParameters={},
+                    oMessageHandlers={},
+                    oPlugins=[],
+                    oCommit=false
+                ) => new lab.flow.Sequence({
+                    title: oTitle,
+                    datacommit: oCommit,
+                    content: oContent,
+                    plugins: oPlugins,
+                    parameters: oParameters,
+                    messageHandlers: oMessageHandlers,
+                }),
+                loop: (
+                    oTemplate,
+                    oParameters,
+                    oShuffle=true,
+                    oTitle='unamed_loop',
+                    oPlugins=[]
+                ) => new lab.flow.Loop({
+                    title: oTitle,
+                    template: oTemplate,
+                    templateParameters: oParameters,
+                    shuffle: oShuffle,
+                    parameters: {},
+                    plugins: oPlugins,
                 }),
             }
         },
         introduction: {
             welcome: {
                 welcome_screen: () => new lab.html.Screen({
-                    contentUrl: './ConceptTestPages/welcome.html',
+                    contentUrl: './Pages/welcome.html',
                     datacommit: false,
                     responses: RawScreenObjects.generic.responses.standard_noninput,
                     title: 'welcome.html',
@@ -345,16 +516,14 @@ export const ScreenObjects = {
             },
         },
         namubonho: {
-            task_canvas: () => new lab.canvas.Screen({
+            task_canvas: (
+                oMsgHandlers={}
+            ) => new lab.canvas.Screen({
                 title: 'stimulusScreen_namubonho',
                 timeout: 5000,
                 viewport: [800, 600],
                 responses: RawScreenObjects.namubonho.properties.responses,
-                messageHandlers: {
-                    /*'before:prepare': function() {
-                        this.options.correctResponse = this.aggregateParameters.type;
-                    }, //move to the implementation code*/
-                },
+                messageHandlers: oMsgHandlers,
                 content: [
                     //RawScreenObjects.namubonho.contents.object.line_template,
                     
@@ -375,7 +544,9 @@ export const ScreenObjects = {
                     RawScreenObjects.namubonho.contents.answer_labels.namu_buttonlabel,
                 ],
             }),
-            feedback_screen: () => new lab.canvas.Screen({
+            feedback_screen: (
+                oMsgHandlers={}
+            ) => new lab.canvas.Screen({
                 title: 'feedbackScreen_namubonho',
                 viewport: [800, 600],
                 responses: RawScreenObjects.generic.responses.standard_noninput,
@@ -385,7 +556,6 @@ export const ScreenObjects = {
                     bgColor: 'black',
                     fgColor: 'white',
                     fbTitle: 'RESPOSTA INDETERMINADA',
-                    //fbMessage: '&eacute; indeterminado se a sua resposta est&aacute; correta.',
                     fbStatusMessage: 'não pode ter sua assertividade determinada',
                     fbHintMessage: 'Não é possível fazer recomendações para as',
                     fbAnswered: '<Sem Resposta>',
@@ -408,32 +578,108 @@ export const ScreenObjects = {
                     RawScreenObjects.namubonho.contents.object.ellipse_template,
                     RawScreenObjects.namubonho.contents.object.rectangle_template,
                 ],
+                messageHandlers: oMsgHandlers,
             }),
-            /*feedback_screen: () => new lab.html.Screen({
-                contentUrl: './ConceptTestPages/feedback.html',
-                title: "feedback.html",
-                parameters: {
-                    bgColor: 'black',
-                    fgColor: 'white',
-                    fbTitle: 'RESPOSTA INDETERMINADA',
-                    //fbMessage: '&eacute; indeterminado se a sua resposta est&aacute; correta.',
-                    fbStatusMessage: 'não pode ter sua assertividade determinada',
-                    fbHintMessage: '',
-                    fbAnswered: '',
-                    fbExpected: '(Resposta Correta Ocultada)',
-                    responseTime: 5,
-                    screenWidth: 800,
-                    screenHeight: 600,
-                },
-                datacommit: false,
-                tardy: true,
-                responses: RawScreenObjects.generic.responses.standard_noninput,
-                messageHandlers: {
-                    /*'before:prepare': function() {
-                        if (this.options.datastore.)
-                    }
-                }, //implement at the experimental code
-            }),*/
         },
     },
+};
+
+export const Screens = {
+    presentation: {
+        welcome: ScreenObjects.templates.generic.pages.html_page(
+            "Pages/welcome.html",
+            {
+                //parameters
+                Revision: Revision,
+                RevInfo: '',
+            },
+            {
+                //message handlers
+                'before:prepare': Handlers.handlers.welcome.before_prepare,
+            }
+        ),
+    },
+    fixcross: {
+        standard: ScreenObjects.templates.generic.fxcross.center_canvas(),
+    },
+    instruction: {
+
+    },
+    task: {
+        namubonho_learning: 
+            ScreenObjects.templates.namubonho.task_canvas(
+                {
+                    // ATTENTION: This is the #TASK
+                    // messageHandlers
+                    'before:prepare': 
+                        Handlers.handlers.generic.trial_before_prepare,
+                }
+            ),
+        wugtug_learning: ScreenObjects.templates.generic.canvas.task_canvas(
+            [
+                RawScreenObjects.generic.contents.left_button.aoi,
+                RawScreenObjects.generic.contents.left_button.ellipse,
+                RawScreenObjects.generic.contents.left_button.text,
+                RawScreenObjects.generic.contents.right_button.aoi,
+                RawScreenObjects.generic.contents.right_button.ellipse,
+                RawScreenObjects.generic.contents.right_button.text,
+                RawScreenObjects.wugtug.contents.answer_labels.wug_buttonlabel,
+                RawScreenObjects.wugtug.contents.answer_labels.tug_buttonlabel,
+                RawScreenObjects.wugtug.contents.object.bg_square,
+                RawScreenObjects.wugtug.contents.object.image_center,
+            ], //content
+            RawScreenObjects.wugtug.properties.responses,
+            'wugtug_learning',
+            {
+                'before:prepare': Handlers.handlers.generic.trial_before_prepare,
+            } // messageHandlers
+        ),
+    },
+    feedback: {
+        namubonho_learning: ScreenObjects.templates.namubonho.feedback_screen(
+            {
+                //messageHandlers
+                //'show': Handlers.handlers.generic.log_handler,
+                'before:prepare': Handlers.handlers.generic.fb_before_prepare,
+            }
+        ),
+        wugtug_learning: ScreenObjects.templates.generic.canvas.feedback_screen(
+            [
+                RawScreenObjects.wugtug.contents.object.bg_square,
+                RawScreenObjects.wugtug.contents.object.image_center,
+            ]
+        ),
+    },
+    sequence: {
+        namubonho_learning: undefined,
+        wugtug_learning: undefined,
+    },
+    /*loop: {
+        namubonho_learning: null,
+    },*/
+};
+Screens.sequence = {
+    namubonho_learning: ScreenObjects.templates.generic.flow.advanced_seq(
+        [ //sequence contents
+            Screens.fixcross.standard,
+            Screens.task.namubonho_learning,
+            Screens.feedback.namubonho_learning,
+        ],
+        'namubonho_learning', //sequence title
+        // ATTENTION: This is the #LOOP_SEQUENCE
+        {
+            //parameters
+        },
+        {
+            // messageHandlers
+        }
+    ),
+    wugtug_learning: ScreenObjects.templates.generic.flow.advanced_seq(
+        [
+            Screens.fixcross.standard,
+            Screens.task.wugtug_learning,
+            Screens.feedback.wugtug_learning,
+        ],
+        'wugtug_learning',
+    ),
 };

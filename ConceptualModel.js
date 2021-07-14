@@ -1,13 +1,13 @@
 import "./ScreenObjects.js";
 import "./lib/lab.js";
-import { Revision } from "./ScreenObjects.js";
+import { Revision } from "./Handlers.js";
 //import { lab } from "./lib/lab.js";
 
 Revision.ConceptualModel = {
     major: 0,
     minor: 0,
-    rev: 22,
-    timestamp: '2021-07-12 8:52PM',
+    rev: 24,
+    timestamp: '2021-07-13 11:07PM',
 };
 
 export const ModelType = {
@@ -20,18 +20,19 @@ export const ModelType = {
     TUG: 0x0020,
     ZILNAR: 0x0040,
     OLBAR: 0x0080,
+    get AMBIGUOUS_NAMUBONHO() {
+        return this.HYBRID | this.NAMU | this.BONHO;
+    },
+    get RANDOM_NAMUBONHO_HYBRIDALLOWED() {
+        return this.AMBIGUOUS_NAMUBONHO | this.RANDOM;
+    },
+    get RANDOM_NAMUBONHO() {
+        return this.NAMU | this.BONHO | this.RANDOM;
+    },
+    get RANDOM_WUGTUG() {
+        return this.WUG | this.TUG | this.RANDOM;
+    }
 };
-ModelType.AMBIGUOUS_NAMUBONHO = ModelType.HYBRID | 
-                                ModelType.NAMU | 
-                                ModelType.BONHO;
-ModelType.RANDOM_NAMUBONHO_HYBRIDALLOWED = ModelType.AMBIGUOUS_NAMUBONHO |
-                                       ModelType.RANDOM;
-ModelType.RANDOM_NAMUBONHO = ModelType.RANDOM |
-                             ModelType.NAMU |
-                             ModelType.BONHO;
-ModelType.RANDOM_WUGTUG = ModelType.RANDOM |
-                          ModelType.WUG |
-                          ModelType.WUG;
 
 /**
  * 
@@ -147,20 +148,26 @@ export const ModelSpec = {
             green: 0x88,
             blue: 0x88,
         },
+        ImageSpec: {
+            Wug: {
+                filename: './images/wug_template.png',
+                width: 129, //original: 216
+                height: 120, //original: 201
+            },
+            Tug: {
+                filename: './images/tug_template.png',
+                width: 187, //original: 446
+                height: 120, //original: 286
+            },
+        },
     },
-};
-ModelSpec.NamuBonho.Offset = {
-    Rectangle: ModelSpec.NamuBonho.RectangleWidth.Namu.min - 
-                ModelSpec.NamuBonho.RectangleWidth.Bonho.min,
-    ELlipse: ModelSpec.NamuBonho.EllipseWidth.Namu.min - 
-                ModelSpec.NamuBonho.EllipseWidth.Bonho.min,
 };
 
 export class BaseModel {
 
     constructor(objType=ModelType.UNDEFINED, model=ModelSpec.Generic) {
         this.data = {
-            object: this,
+            //object: this,
         };
         this.model = model;
         this.SetObjectType(objType);
@@ -421,6 +428,20 @@ export class WugTug extends BaseModel {
             blue: this.RandomlyAssignColorChannel(),
         };
         return ret;
+    }
+
+    addSuplementaryData() {
+        if (this.objectType & ModelType.WUG) {
+            this.data.image = this.model.ImageSpec.Wug;
+        }
+        else {
+            this.data.image = this.model.ImageSpec.Tug;
+        }
+    }
+
+    SetObjectType(objType = ModelType.RANDOM) {
+        super.SetObjectType(objType);
+        this.addSuplementaryData();
     }
 
     Generate(type=ModelType.UNDEFINED) {
