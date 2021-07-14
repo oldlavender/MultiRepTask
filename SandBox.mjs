@@ -14,7 +14,6 @@ Revision.General.minor = 3;
 Revision.General.rev = 73;
 Revision.General.timestamp = '2021-07-14 1:12AM';
 
-
 /*var namubonho_s1 = Handlers.utils.GenerateLoopData(
     500,
     ConceptualModel.classes.NamuBonho,
