@@ -30,3 +30,6 @@ TODO Sessions:
 
 # Author
 Bruno Moreira-Guedes <moreira.guedes@estudante.uffs.edu.br>
+
+## License
+This software is licensed under the terms of the [**GNU Affero GPL**](https://github.com/brunodOut/MultiRepTest/blob/main/LICENSE).
