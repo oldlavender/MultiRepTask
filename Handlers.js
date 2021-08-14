@@ -3,8 +3,8 @@ export var Revision = {
     Handlers: {
         major: 0,
         minor: 0,
-        rev: 12,
-        timestamp: '2021-07-14 1:16AM',
+        rev: 35,
+        timestamp: '2021-08-13 4:34PM',
     }
 };
 const GenerateLoopData = (n, classType, dataType) => {
@@ -23,16 +23,143 @@ const revSet = (revInfo) => revString(
     revInfo.rev
 );
 
+const getObjPath = (obj, [f, ...l]) => {
+    if (obj === undefined) {
+        return obj;
+    }
+    if (l.length == 0) {
+        return obj[f];
+    }
+    else {
+        return getObjPath(obj[f], l);
+    }
+};
+
 class EventMgr {
-    constructor(options) {
-      this.title = options.title;
+    constructor(options={}) {
+      this.title = options.title || 'unamed-EventMgr';
+      if (options.log === undefined) {
+          this.log = true;
+      }
+      else {
+        this.log = options.log;
+      }
+
     }
   
     handle(context, event) {
-      console.log(`Component ${ this.title } 
-                   received ${ event }. 
-                   Context= ${context}`);
+        if (this.log == true) {
+            console.log(`Component ${ this.title } 
+                received ${ event }. 
+                Context= ${context}`);
+        }
     }
+}
+
+class UpdaterSetup {
+    constructor(options={}) {
+        this.installEvent = options.installEvent || 'before:prepare';
+        this.updaters = options.updaters || {};
+        this.log = options.log === undefined ? true : options.log;
+        this.verbose = options.verbose === undefined ? true : options.verbose;
+        this.title = options.title || 'untitled-UpdaterInstaller';
+        this.prepared = false;
+        this.updatersPath = options.updatersPath || 
+                            'data.updaters';
+        this.destination = options.destinationContentIds || [];
+        this.screen = options.screen || null;
+    }
+
+    handle(context, event) {
+        if (event == 'plugin:init' && !this.prepared) {
+            this.Prepare(context);
+        }
+        if (event == this.installEvent) {
+            this.Setup(context);
+        }
+        if (this.log == true) {
+            this.EventLog(context, event);
+        }
+    }
+
+    Prepare(context) {
+        //this.prepared = true;
+        //this.screen = context; // WTF!! For wharever reasons it's causing
+                                 // an exception if this line is present!
+        this.prepared = true;
+        this.Log(
+            'info', 
+            "Has been sucessfully prepared", 
+            "UpdaterSetup::Prepare"
+        );
+    }
+
+    Setup(context) {
+        console.log(
+            "UpdaterSetup::Setup()",
+            "\n\tcontext=", context,
+            "\n\tthis.screen=", this.screen,
+            "\n\n   "
+        );
+        
+        var updaters = getObjPath(
+            context.aggregateParameters,
+            this.updatersPath.split('.')
+        );
+        
+        var dst = [];
+
+        for (let i in this.destination) {
+            for (let j in context.options.content) {
+                if (
+                    this.destination[i] == context.options.content[j].id
+                ) {
+                    // It's a match!
+                    this.Log(
+                        'info',
+                        `Setting up updater for object id=${this.destination[i].id}`,
+                        "UpdaterSetup.Setup()"
+                    );
+                    context.options.content[j].updaters = updaters;
+                }
+            }
+        }
+
+    }
+
+    EventLog(context, event) {
+        console.log(`${this.title}: received a '${event}' event.
+            context=`, context,`
+            this=`, this);
+    }
+
+    Log(level, message, prefix="", details="") {
+        var out, suffix = "";
+        if (prefix.length > 0) {
+            out = `${level}\t[${prefix}] ${message}`;
+        }
+        if (details.length > 0) {
+            out += `\n\t\t\t\t${details}`;
+        }
+        if (this.verbose) {
+            suffix = `\n\t\t\t\tthis=`;
+        }
+        switch(level) {
+            case 'warn':
+                console.warn(out, suffix, this.verbose ? this : '');
+                break;
+            case 'error':
+            case 'fatal':
+                console.error(out, suffix, this.verbose ? this : '');
+                break;
+            default: //'info' and others
+                if (this.log) {
+                    console.log(out, suffix, this.verbose ? this : '');
+                }
+                
+        }
+    }
+
 }
 
 function welcome_beforePrepare() {
@@ -49,7 +176,7 @@ function welcome_beforePrepare() {
 }
 
 function trial_loadParametersBeforePrepare() {
-    console.log(`nb: [${this.options.title}]:
+    /*console.log(`nb: [${this.options.title}]:
                 hybrid=${this.aggregateParameters.hybrid}
                 type=${this.aggregateParameters.data.type}
                 data=`,
@@ -57,15 +184,15 @@ function trial_loadParametersBeforePrepare() {
                 `
                 this.aggregateParameters=`,
                 this.aggregateParameters
-                );
+                );*/
                 //this=${JSON.stringify(this)}`);
     if (!this.aggregateParameters.hybrid) {
         this.options.correctResponse = this.aggregateParameters.data.type;
     }
-    console.log(`nb: [${this.options.title}]:
+    /*console.log(`nb: [${this.options.title}]:
                 Correct response set to: [${this.options.correctResponse}]
                 this.options=`,
-                this.options);
+                this.options);*/
 }
 
 function feedback_loadParametersBeforePrepare() {
@@ -144,9 +271,11 @@ export const Handlers = {
         GenerateLoopData: GenerateLoopData,
         revString: revString,
         revSet: revSet,
+        getObjPath: getObjPath,
     },
     classes: {
         EventMgr: EventMgr,
+        UpdaterSetup: UpdaterSetup,
     },
     handlers: {
         welcome: {

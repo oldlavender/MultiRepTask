@@ -1,14 +1,15 @@
 import "./lib/lab.js";
 import "./lib/lab.fallback.js";
 import { Handlers, Revision } from "./Handlers.js";
+import { move, MoveLab } from "./plugins/move.lab.mjs";
 
 Revision.ScreenObjects = {
     major: 0,
     minor: 3,
-    rev: 18,
-    timestamp: '2021-07-14 1:12AM',
+    rev: 38,
+    timestamp: '2021-08-13 6:06PM',
 };
-
+ 
 export const RawScreenObjects = {
     generic: {
         contents: {
@@ -80,84 +81,7 @@ export const RawScreenObjects = {
                     label: 'right'
                 },
             },
-        },
-        responses: {
-            standard_noninput: {
-                'keypress(Space)': 'continue',
-                'keypress(Enter)': 'continue',
-                'keypress(Right)': 'continue',
-                'click #continue': 'continue',
-                'click #space': 'continue',
-            },
-        },
-    },
-    namubonho: {
-        contents: {
-            answer_labels: {
-                namu_buttonlabel: {
-                    id: 'namu_buttonlabel', //left
-                    type: 'i-text',
-                    left: -350,
-                    top: 135,
-                    fontSize: 20,
-                    text: 'namu',
-                    fill: '#000000',
-                    stroke: '#000000',
-                },
-                bonho_buttonlabel: {
-                    id: 'bonho_buttonlabel', //left
-                    type: 'i-text',
-                    left: 350,
-                    top: 135,
-                    fontSize: 20,
-                    text: 'bonho',
-                    fill: '#000000',
-                    stroke: '#000000',
-                },
-            },
-            object: 
-            {
-                ellipse_template: {
-                    id: 'Object_p1',
-                    type: 'ellipse',
-                    left: 0,
-                    top: 0,
-                    width: '${parameters.data.ellipseWidth}', //changed from fixed 140
-                    height: 20,
-                    //strokeWidth: 1,
-                    stroke: 'rgb(255,255,255)',
-                    fill: 'black',
-                    angle: 45
-                    //angle: '${parameters.p1Angle}', //kept for log purposes 
-                },
-                ellipse_template2: { 
-                    // @TODO: Remove it when it's safe
-                    //experimental, trying with two ellipses
-                    id: 'Object_p2',
-                    type: 'ellipse',
-                    left: 0,
-                    top: 0,
-                    width: 140,
-                    height: 20,
-                    fill: 'black',
-                    angle: '${parameters.p2Angle}',
-                },
-                rectangle_template: {
-                    id: 'Object_p2',
-                    type: 'rect', //rectangle
-                    left: 0,
-                    top: 0,
-                    width: '${parameters.data.rectangleWidth}',
-                    height: '25',
-                    fill: 'black',
-                    angle: 45+90,
-                    // angle: '${parameters.p1Angle+90}', //kept for log purposes
-                    // angle: '${parameters.p2Angle}', //kept for log purposes
-                },
-            },
-        },
-        feedback_screen: {
-            objects: {
+            feedback_screen: {
                 background:{
                     id: 'background',
                     type: 'rect',
@@ -259,6 +183,70 @@ export const RawScreenObjects = {
                 },
             },
         },
+        responses: {
+            standard_noninput: {
+                'keypress(Space)': 'continue',
+                'keypress(Enter)': 'continue',
+                'keypress(Right)': 'continue',
+                'click #continue': 'continue',
+                'click #space': 'continue',
+            },
+        },
+    },
+    namubonho: {
+        contents: {
+            answer_labels: {
+                namu_buttonlabel: {
+                    id: 'namu_buttonlabel', //left
+                    type: 'i-text',
+                    left: -350,
+                    top: 135,
+                    fontSize: 20,
+                    text: 'namu',
+                    fill: '#000000',
+                    stroke: '#000000',
+                },
+                bonho_buttonlabel: {
+                    id: 'bonho_buttonlabel', //left
+                    type: 'i-text',
+                    left: 350,
+                    top: 135,
+                    fontSize: 20,
+                    text: 'bonho',
+                    fill: '#000000',
+                    stroke: '#000000',
+                },
+            },
+            object: 
+            {
+                ellipse_template: {
+                    id: 'Object_p1',
+                    type: 'ellipse',
+                    left: 0,
+                    top: 0,
+                    width: '${parameters.data.ellipseWidth}', //changed from fixed 140
+                    height: 20,
+                    //strokeWidth: 1,
+                    stroke: 'rgb(255,255,255)',
+                    fill: 'black',
+                    angle: 45
+                    //angle: '${parameters.p1Angle}', //kept for log purposes 
+                },
+                rectangle_template: {
+                    id: 'Object_p2',
+                    type: 'rect', //rectangle
+                    left: 0,
+                    top: 0,
+                    width: '${parameters.data.rectangleWidth}',
+                    height: '25',
+                    fill: 'black',
+                    angle: 45+90,
+                    // angle: '${parameters.p1Angle+90}', //kept for log purposes
+                    // angle: '${parameters.p2Angle}', //kept for log purposes
+                },
+            },
+        },
+        feedback_screen: {},
         properties: {
             responses: {
                 'keypress(d)': 'namu',
@@ -274,7 +262,7 @@ export const RawScreenObjects = {
         contents: {
             answer_labels: {
                 wug_buttonlabel: {
-                    id: 'namu_buttonlabel', //left
+                    id: 'wug_buttonlabel', //left
                     type: 'i-text',
                     left: -350,
                     top: 135,
@@ -284,7 +272,7 @@ export const RawScreenObjects = {
                     stroke: '#000000',
                 },
                 tug_buttonlabel: {
-                    id: 'bonho_buttonlabel', //left
+                    id: 'tug_buttonlabel', //left
                     type: 'i-text',
                     left: 350,
                     top: 135,
@@ -329,6 +317,88 @@ export const RawScreenObjects = {
             },
         },
     },
+    zilnarolbar: {
+        contents: {
+            answer_labels: {
+                zilnar_buttonlabel: {
+                    id: 'zilnar_buttonlabel', //left
+                    type: 'i-text',
+                    left: -350,
+                    top: 135,
+                    fontSize: 20,
+                    text: 'Zilnar',
+                    fill: '#000000',
+                    stroke: '#000000',
+                },
+                olbar_buttonlabel: {
+                    id: 'olbar_buttonlabel', //left
+                    type: 'i-text',
+                    left: 350,
+                    top: 135,
+                    fontSize: 20,
+                    text: 'Olbar',
+                    fill: '#000000',
+                    stroke: '#000000',
+                },
+            },
+            object: {
+                // namu-bonho structure, positioned at left 
+                ellipse_template: {
+                    id: 'Object_p1',
+                    type: 'ellipse',
+                    left: -250,
+                    top: 0,
+                    width: '${parameters.data.object.ellipseWidth}', //changed from fixed 140
+                    height: 20,
+                    //strokeWidth: 1,
+                    stroke: 'rgb(255,255,255)',
+                    fill: 'black',
+                    angle: 45,
+                    //angle: '${parameters.p1Angle}', //kept for log purposes
+                    /*updaters: {
+                        left: {
+                            id: 'p1_horizontal_movement',
+                            type: 'Linear',
+                            duration: 500,
+                            start: -250,
+                            end: 250,
+                        }
+                    },*/
+                },
+                rectangle_template: {
+                    id: 'Object_p2',
+                    type: 'rect', //rectangle
+                    left: -250,
+                    top: 0,
+                    width: '${parameters.data.object.rectangleWidth}',
+                    height: '25',
+                    fill: 'black',
+                    angle: 45+90,
+                    // angle: '${parameters.p1Angle+90}', //kept for log purposes
+                    // angle: '${parameters.p2Angle}', //kept for log purposes
+                    /*updaters: {
+                        left: {
+                            id: 'p1_horizontal_movement',
+                            type: 'Linear',
+                            duration: 500,
+                            start: -250,
+                            end: 250,
+                        }
+                    },*/
+                },
+            },
+        },
+        properties: {
+            responses: {
+                'keypress(d)': 'zilnar',
+                'keypress(f)': 'olbar',
+                // DISABLED: used for mobile, but mobile was deactivated for
+                // accuracy reasons (it didn't precisely registered RTs)
+                //'click @left': 'zilnar',
+                //'click @right': 'olbar',
+            },
+        },
+    },
     fxcross: {
         center: [
             {
@@ -340,7 +410,7 @@ export const RawScreenObjects = {
                 strokeWidth: 6,
                 angle: 0,
                 stroke: "#fcbb0a",
-                updaters: {
+                updaters: { // TODO: Maybe remove it later
                     angle: {
                         type: 'Linear',
                         duration: 500,
@@ -358,7 +428,46 @@ export const RawScreenObjects = {
                 strokeWidth: 6,
                 angle: 90,
                 stroke: "#fcbb0a",
-                updaters: {
+                updaters: { // TODO: Maybe remove it later
+                    angle: {
+                        type: 'Linear',
+                        duration: 500,
+                        start: 90,
+                        end: 720,
+                    },
+                },
+            },
+        ],
+        left: [
+            
+            {
+                id: 'left_fxcross_horiz',
+                type: 'line',
+                left: -280,
+                top: 0,
+                width: 65,
+                strokeWidth: 6,
+                angle: 0,
+                stroke: "#fcbb0a",
+                updaters: { // TODO: Maybe remove it later
+                    angle: {
+                        type: 'Linear',
+                        duration: 500,
+                        start: 0,
+                        end: 630,
+                    },
+                },
+            },
+            {
+                id: 'left_fxcross_vert',
+                type: 'line',
+                left: -280,
+                top: 0,
+                width: 65,
+                strokeWidth: 6,
+                angle: 90,
+                stroke: "#fcbb0a",
+                updaters: { // TODO: Maybe remove it later
                     angle: {
                         type: 'Linear',
                         duration: 500,
@@ -375,10 +484,10 @@ export const ScreenObjects = {
     templates: {
         generic: {
             fxcross: {
-                center_canvas: (
+                canvas: (
+                    oContent=RawScreenObjects.fxcross.center,
                     oTitle='fxcross',
-                    oTimeout=500,
-                    oContent=RawScreenObjects.fxcross.center
+                    oTimeout=500
                 ) => new lab.canvas.Screen({
                     title: oTitle,
                     datacommit: false,
@@ -393,6 +502,7 @@ export const ScreenObjects = {
                     oResponses={},
                     oTitle='untitled-canvas',
                     oMsgHandlers={},
+                    oPlugins=[],
                     oTimeout=5000
                 ) => new lab.canvas.Screen({
                     title: oTitle,
@@ -401,27 +511,28 @@ export const ScreenObjects = {
                     responses: oResponses,
                     messageHandlers: oMsgHandlers,
                     content: oContent,
+                    plugins: oPlugins,
+                    debug: oPlugins.length==2 ? true : false,
                 }),
                 feedback_screen: function(
                     addContents=[],
+                    oPlugins=[],
                     oMsgHandlers={
                         'before:prepare': Handlers.handlers.generic.fb_before_prepare,
                     }
                 )
                 {
                     let content, fixed = [
-                        RawScreenObjects.namubonho.feedback_screen.objects.background,
-                        RawScreenObjects.namubonho.feedback_screen.objects.correctResponse_label,
-                        RawScreenObjects.namubonho.feedback_screen.objects.correctResponse_value,
-                        RawScreenObjects.namubonho.feedback_screen.objects.status_message,
-                        RawScreenObjects.namubonho.feedback_screen.objects.hint_message,
-                        RawScreenObjects.namubonho.feedback_screen.objects.response_label,
-                        RawScreenObjects.namubonho.feedback_screen.objects.response_value,
-                        RawScreenObjects.namubonho.feedback_screen.objects.time_label,
-                        RawScreenObjects.namubonho.feedback_screen.objects.time_value,
-                        RawScreenObjects.namubonho.feedback_screen.objects.title,
-                        RawScreenObjects.namubonho.contents.object.ellipse_template,
-                        RawScreenObjects.namubonho.contents.object.rectangle_template,
+                        RawScreenObjects.generic.contents.feedback_screen.background,
+                        RawScreenObjects.generic.contents.feedback_screen.correctResponse_label,
+                        RawScreenObjects.generic.contents.feedback_screen.correctResponse_value,
+                        RawScreenObjects.generic.contents.feedback_screen.status_message,
+                        RawScreenObjects.generic.contents.feedback_screen.hint_message,
+                        RawScreenObjects.generic.contents.feedback_screen.response_label,
+                        RawScreenObjects.generic.contents.feedback_screen.response_value,
+                        RawScreenObjects.generic.contents.feedback_screen.time_label,
+                        RawScreenObjects.generic.contents.feedback_screen.time_value,
+                        RawScreenObjects.generic.contents.feedback_screen.title,
                     ];
                     content =fixed.concat(addContents);
                     //addContents.forEach(i => content.push(i));
@@ -445,6 +556,7 @@ export const ScreenObjects = {
                         },
                         content: content,
                         messageHandlers: oMsgHandlers,
+                        plugins: oPlugins,
                     });
                 },
             },
@@ -565,16 +677,16 @@ export const ScreenObjects = {
                     screenHeight: 600,
                 },
                 content: [
-                    RawScreenObjects.namubonho.feedback_screen.objects.background,
-                    RawScreenObjects.namubonho.feedback_screen.objects.correctResponse_label,
-                    RawScreenObjects.namubonho.feedback_screen.objects.correctResponse_value,
-                    RawScreenObjects.namubonho.feedback_screen.objects.status_message,
-                    RawScreenObjects.namubonho.feedback_screen.objects.hint_message,
-                    RawScreenObjects.namubonho.feedback_screen.objects.response_label,
-                    RawScreenObjects.namubonho.feedback_screen.objects.response_value,
-                    RawScreenObjects.namubonho.feedback_screen.objects.time_label,
-                    RawScreenObjects.namubonho.feedback_screen.objects.time_value,
-                    RawScreenObjects.namubonho.feedback_screen.objects.title,
+                    RawScreenObjects.generic.contents.feedback_screen.background,
+                    RawScreenObjects.generic.contents.feedback_screen.correctResponse_label,
+                    RawScreenObjects.generic.contents.feedback_screen.correctResponse_value,
+                    RawScreenObjects.generic.contents.feedback_screen.status_message,
+                    RawScreenObjects.generic.contents.feedback_screen.hint_message,
+                    RawScreenObjects.generic.contents.feedback_screen.response_label,
+                    RawScreenObjects.generic.contents.feedback_screen.response_value,
+                    RawScreenObjects.generic.contents.feedback_screen.time_label,
+                    RawScreenObjects.generic.contents.feedback_screen.time_value,
+                    RawScreenObjects.generic.contents.feedback_screen.title,
                     RawScreenObjects.namubonho.contents.object.ellipse_template,
                     RawScreenObjects.namubonho.contents.object.rectangle_template,
                 ],
@@ -600,7 +712,11 @@ export const Screens = {
         ),
     },
     fixcross: {
-        standard: ScreenObjects.templates.generic.fxcross.center_canvas(),
+        standard: ScreenObjects.templates.generic.fxcross.canvas(),
+        preanimation: ScreenObjects.templates.generic.fxcross.canvas(
+            RawScreenObjects.fxcross.left,
+            'left_fxcross'
+        ),
     },
     instruction: {
 
@@ -634,6 +750,38 @@ export const Screens = {
                 'before:prepare': Handlers.handlers.generic.trial_before_prepare,
             } // messageHandlers
         ),
+        zilnarolbar_learning: ScreenObjects.templates.generic.canvas.task_canvas(
+            [
+                RawScreenObjects.generic.contents.left_button.aoi,
+                RawScreenObjects.generic.contents.left_button.ellipse,
+                RawScreenObjects.generic.contents.left_button.text,
+                RawScreenObjects.generic.contents.right_button.aoi,
+                RawScreenObjects.generic.contents.right_button.ellipse,
+                RawScreenObjects.generic.contents.right_button.text,
+                RawScreenObjects.zilnarolbar.contents.answer_labels.zilnar_buttonlabel,
+                RawScreenObjects.zilnarolbar.contents.answer_labels.olbar_buttonlabel,
+                RawScreenObjects.zilnarolbar.contents.object.ellipse_template,
+                RawScreenObjects.zilnarolbar.contents.object.rectangle_template
+            ],
+            RawScreenObjects.zilnarolbar.properties.responses,
+            'zilnarolbar_learning',
+            {
+                'before:prepare': Handlers.handlers.generic.trial_before_prepare,
+            },
+            [
+                new Handlers.classes.UpdaterSetup({
+                    title: 'zilnarolbar_learning_task',
+                    installEvent: 'before:prepare',
+                    log: false,
+                    verbose: false,
+                    destinationContentIds: [
+                        'Object_p1',
+                        'Object_p2',
+                    ],
+                }),
+                new MoveLab(),
+            ]
+        ),
     },
     feedback: {
         namubonho_learning: ScreenObjects.templates.namubonho.feedback_screen(
@@ -649,10 +797,30 @@ export const Screens = {
                 RawScreenObjects.wugtug.contents.object.image_center,
             ]
         ),
+        zilnarolbar_learning: ScreenObjects.templates.generic.canvas.feedback_screen(
+            [
+                RawScreenObjects.zilnarolbar.contents.object.ellipse_template,
+                RawScreenObjects.zilnarolbar.contents.object.rectangle_template,
+            ],
+            [
+                new Handlers.classes.UpdaterSetup({
+                    title: 'zilnarolbar_feedback',
+                    installEvent: 'before:prepare',
+                    log: false,
+                    verbose: false,
+                    destinationContentIds: [
+                        'Object_p1',
+                        'Object_p2',
+                    ],
+                }),
+                new MoveLab(),
+            ]
+        ),
     },
     sequence: {
         namubonho_learning: undefined,
         wugtug_learning: undefined,
+        zilnarolbar_learning: undefined,
     },
     /*loop: {
         namubonho_learning: null,
@@ -680,6 +848,14 @@ Screens.sequence = {
             Screens.task.wugtug_learning,
             Screens.feedback.wugtug_learning,
         ],
-        'wugtug_learning',
+        'wugtug_learning'
+    ),
+    zilnarolbar_learning: ScreenObjects.templates.generic.flow.advanced_seq(
+        [
+            Screens.fixcross.preanimation,
+            Screens.task.zilnarolbar_learning,
+            Screens.feedback.zilnarolbar_learning,
+        ],
+        'zilnarolbar_learning'
     ),
 };

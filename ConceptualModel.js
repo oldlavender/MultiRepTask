@@ -6,9 +6,24 @@ import { Revision } from "./Handlers.js";
 Revision.ConceptualModel = {
     major: 0,
     minor: 0,
-    rev: 24,
-    timestamp: '2021-07-13 11:07PM',
+    rev: 40,
+    timestamp: '2021-08-13 6:11PM',
 };
+
+
+// util functions
+const titCaseWord = ([fst, ...rst]) => 
+    fst.toUpperCase() + rst.join('').toLowerCase();
+
+const combineFlags = (arr = []) => {
+    var ret = 0xffff;
+    for (let i in arr) {
+        ret = (0xffff & arr[i] & ret);
+    }
+    return ret;
+};
+
+//////////////////
 
 export const ModelType = {
     UNDEFINED: 0x0000,
@@ -31,7 +46,10 @@ export const ModelType = {
     },
     get RANDOM_WUGTUG() {
         return this.WUG | this.TUG | this.RANDOM;
-    }
+    },
+    get RANDOM_ZILNAROLBAR() {
+        return this.ZILNAR | this.OLBAR | this.RANDOM;
+    },
 };
 
 /**
@@ -161,6 +179,53 @@ export const ModelSpec = {
             },
         },
     },
+    ZilnarOlbar: {
+        AllowedModelTypes: [ModelType.ZILNAR, ModelType.OLBAR],
+        ViableModelTypes: [ModelType.ZILNAR, ModelType.OLBAR],
+        ViableHybridModelTypes: [],
+        ArgumentSpec: {
+            Zilnar: {
+                ViableObjectTypes: [ModelType.NAMU, ModelType.AMBIGUOUS_NAMUBONHO],
+                StrictObjectTypes: [ModelType.NAMU],
+                ViableAgentTypes: [ModelType.WUG],
+                StrictAgentTypes: [ModelType.WUG],
+            },
+            Olbar: {
+                ViableObjectTypes: [ModelType.BONHO, ModelType.AMBIGUOUS_NAMUBONHO],
+                StrictObjectTypes: [ModelType.BONHO],
+                ViableAgentTypes: [ModelType.TUG],
+                StrictAgentTypes: [ModelType.TUG],
+            },
+        },
+        UpdaterSpec: {
+            Zilnar: {
+                left: {
+                    id: 'horizontal-movement',
+                    type: 'Linear',
+                    duration: 500,
+                    start: -250,
+                    end: 250,
+                },
+                top: {
+                    id: 'vertical-movement',
+                    type: 'Arc',
+                    duration: 500,
+                    start: 0,
+                    end: 0,
+                    middle: -150,
+                },
+            },
+            Olbar: {
+                left: {
+                    id: 'horizontal-movement',
+                    type: 'Linear',
+                    duration: 500,
+                    start: -250,
+                    end: 250,
+                },
+            },
+        },
+    }
 };
 
 export class BaseModel {
@@ -451,6 +516,89 @@ export class WugTug extends BaseModel {
 
 }
 
+export class ZilnarOlbar extends BaseModel {
+    constructor(
+        frmType = ModelType.UNDEFINED,
+        genArgs = true,
+        hybridArgs = false,
+        object = null, 
+        subject = null
+    ) {
+        super(frmType, ModelSpec.ZilnarOlbar);
+        this.generateArguments = genArgs; //
+        this.initialize(hybridArgs, object, subject);
+        
+    }
+    
+    SetObjectType(frmType = ModelType.UNDEFINED) {
+        super.SetObjectType(frmType);
+        this.updaters = this.calculateUpdaters();
+    }
+
+    calculateUpdaters() {
+        return this.model.UpdaterSpec[titCaseWord(this.GetObjectTypeString())];
+    }
+
+    initialize(hybridArgs, object, subject) {
+        var obj = object, sbj = subject;
+
+        if (this.generateArguments) {
+            this.GenerateArguments(hybridArgs);
+        }
+
+        this.object = obj;
+        this.subject = sbj;
+    }
+
+    GenerateArguments(genHybrid = false) {
+        var base = this.model.ArgumentSpec[titCaseWord(
+            this.GetObjectTypeString()
+        )];
+        var objPoll, sbjPoll = base.StrictAgentTypes;
+
+        if (genHybrid) {
+            objPoll = base.ViableObjectTypes;
+        }
+        else {
+            objPoll = base.StrictObjectTypes;
+        }
+
+        this.object = new NamuBonho(combineFlags(objPoll));
+        this.subject = new WugTug(combineFlags(sbjPoll));
+    }
+
+    set object(obj) {
+        if (obj instanceof NamuBonho) {
+            this._object = obj;
+            this.data.object = obj.GetData();
+        }
+    }
+
+    set subject(sbj) {
+        if (sbj instanceof WugTug) {
+            this._subject = sbj;
+            this.data.subject = sbj.GetData();
+        }
+    }
+
+    set updaters(upd) {
+        this._updaters = upd || {};
+        this.data.updaters = this._updaters;
+    }
+
+    get object() {
+        return this._object;
+    }
+
+    get subject() {
+        return this._subject;
+    }
+
+    get updaters() {
+        return this._updaters;
+    }
+}
+
 export var ConceptualModel = {
     datatypes: {
         ModelType: ModelType,
@@ -465,5 +613,6 @@ export var ConceptualModel = {
         BaseModel: BaseModel,
         NamuBonho: NamuBonho,
         WugTug: WugTug,
+        ZilnarOlbar: ZilnarOlbar,
     },
 };

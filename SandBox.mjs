@@ -2,23 +2,26 @@ import "./lib/lab.js";
 import { ConceptualModel, NamuBonho } from "./ConceptualModel.js";
 import { ScreenObjects, Screens } from "./ScreenObjects.js";
 import { Revision, Handlers } from "./Handlers.js";
+import { move, MoveLab } from "./plugins/move.lab.mjs";
 
 Revision.SandBox = {
     major: 0,
     minor: 0,
-    rev: 15,
-    timestamp: '2021-07-13 11:25PM',
+    rev: 35,
+    timestamp: '2021-08-12 11:44PM',
 };
 Revision.General.major = 0;
 Revision.General.minor = 3;
-Revision.General.rev = 73;
-Revision.General.timestamp = '2021-07-14 1:12AM';
+Revision.General.rev = 141;
+Revision.General.timestamp = '2021-08-13 5:58PM';
+
+var loop_log = false;
 
 /*var namubonho_s1 = Handlers.utils.GenerateLoopData(
     500,
     ConceptualModel.classes.NamuBonho,
     ConceptualModel.datatypes.ModelType.RANDOM_NAMUBONHO
-);
+); 
 var wugtug_s1 = Handlers.utils.GenerateLoopData(
     500,
     ConceptualModel.classes.WugTug,
@@ -29,7 +32,7 @@ var wugtug_s1 = Handlers.utils.GenerateLoopData(
 var loop_namubonho_learning = ScreenObjects.templates.generic.flow.loop(
     Screens.sequence.namubonho_learning,
     Handlers.utils.GenerateLoopData(
-        20,
+        5,
         ConceptualModel.classes.NamuBonho,
         ConceptualModel.datatypes.ModelType.RANDOM_NAMUBONHO
     ),
@@ -38,6 +41,7 @@ var loop_namubonho_learning = ScreenObjects.templates.generic.flow.loop(
     [
         new Handlers.classes.EventMgr({
             title: 'namubonho_loop',
+            log: loop_log,
         }),
     ]
 );
@@ -45,7 +49,7 @@ var loop_namubonho_learning = ScreenObjects.templates.generic.flow.loop(
 var loop_wugtug_learning = ScreenObjects.templates.generic.flow.loop(
     Screens.sequence.wugtug_learning,
     Handlers.utils.GenerateLoopData(
-        20,
+        5,
         ConceptualModel.classes.WugTug,
         ConceptualModel.datatypes.ModelType.RANDOM_WUGTUG
     ),
@@ -54,6 +58,24 @@ var loop_wugtug_learning = ScreenObjects.templates.generic.flow.loop(
     [
         new Handlers.classes.EventMgr({
             title: 'wugtug_loop',
+            log: loop_log,
+        }),
+    ]
+);
+
+var loop_zilnarolbar_learning = ScreenObjects.templates.generic.flow.loop(
+    Screens.sequence.zilnarolbar_learning,
+    Handlers.utils.GenerateLoopData(
+        10,
+        ConceptualModel.classes.ZilnarOlbar,
+        ConceptualModel.datatypes.ModelType.RANDOM_ZILNAROLBAR
+    ),
+    true,
+    'zilnarolbar_loop',
+    [
+        new Handlers.classes.EventMgr({
+            title: 'zilnarolbar_loop',
+            log: loop_log,
         }),
     ]
 );
@@ -64,6 +86,7 @@ var study = new lab.flow.Sequence({
     plugins: [
         new Handlers.classes.EventMgr({
             title: 'root',
+            log: loop_log,
         }),
     ],
     content: [
@@ -71,8 +94,8 @@ var study = new lab.flow.Sequence({
         loop_namubonho_,
         */
         loop_namubonho_learning,
-
-        loop_wugtug_learning
+        loop_wugtug_learning,
+        loop_zilnarolbar_learning,
     ],
     messageHandlers: {
         'after:end': function() {
@@ -80,6 +103,8 @@ var study = new lab.flow.Sequence({
         }
     },
 });
+
+console.log("study=", study);
 
 study.run();
 
@@ -123,5 +148,21 @@ console.log("any_wt=", any_wt);
 wug.Generate(ConceptualModel.datatypes.ModelType.RANDOM_WUGTUG);
 
 console.log("new wug=", wug);
+
+console.log(".: ZILNAR-OLBAR SECTION :.");
+
+var zilnar = new ConceptualModel.classes.ZilnarOlbar(
+    ConceptualModel.datatypes.ModelType.ZILNAR
+);
+var olbar = new ConceptualModel.classes.ZilnarOlbar(
+    ConceptualModel.datatypes.ModelType.OLBAR
+);
+var any_zo = new ConceptualModel.classes.ZilnarOlbar(
+    ConceptualModel.datatypes.ModelType.RANDOM_ZILNAROLBAR
+);
+
+console.log("zilnar=", zilnar);
+console.log("olbar=", olbar);
+console.log("any_zo=", any_zo);
 
 console.log("Hello, world");/**/
