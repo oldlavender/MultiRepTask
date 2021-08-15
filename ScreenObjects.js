@@ -6,8 +6,8 @@ import { move, MoveLab } from "./plugins/move.lab.mjs";
 Revision.ScreenObjects = {
     major: 0,
     minor: 3,
-    rev: 38,
-    timestamp: '2021-08-13 6:06PM',
+    rev: 46,
+    timestamp: '2021-08-14 10:04PM',
 };
  
 export const RawScreenObjects = {
@@ -346,7 +346,7 @@ export const RawScreenObjects = {
                 ellipse_template: {
                     id: 'Object_p1',
                     type: 'ellipse',
-                    left: -250,
+                    left: -199,
                     top: 0,
                     width: '${parameters.data.object.ellipseWidth}', //changed from fixed 140
                     height: 20,
@@ -368,7 +368,7 @@ export const RawScreenObjects = {
                 rectangle_template: {
                     id: 'Object_p2',
                     type: 'rect', //rectangle
-                    left: -250,
+                    left: -199,
                     top: 0,
                     width: '${parameters.data.object.rectangleWidth}',
                     height: '25',
@@ -385,6 +385,35 @@ export const RawScreenObjects = {
                             end: 250,
                         }
                     },*/
+                },
+                white_stripe: {
+                    id: 'white_stripe',
+                    type: 'rect',
+                    left: 0,
+                    top: 0,
+                    width: 800,
+                    height: 350,
+                    fill: '#ffffff',
+                },
+                subj_image_center: {
+                    id: 'zo_wugtug_image',
+                    type: 'image',
+                    left: -306,
+                    top: 0,
+                    src: '${parameters.data.subject.image.filename}',
+                    width: '${parameters.data.subject.image.width}',
+                    height: '${parameters.data.subject.image.height}',
+                    fill: '${parameters.data.subject.colorRgbHex}'
+                },
+                subj_bg_square: {
+                    id: 'zo_wugtug_bg_square',
+                    type: 'rect',
+                    left: -306,
+                    top: 0,
+                    width: '${parameters.data.subject.image.width - 1}',
+                    height: '${parameters.data.subject.image.height - 1}',
+                    fill: '${parameters.data.subject.colorRgbHex}',
+                    //angle: 45+90,
                 },
             },
         },
@@ -438,12 +467,11 @@ export const RawScreenObjects = {
                 },
             },
         ],
-        left: [
-            
+        left: [ 
             {
                 id: 'left_fxcross_horiz',
                 type: 'line',
-                left: -280,
+                left: -227,
                 top: 0,
                 width: 65,
                 strokeWidth: 6,
@@ -461,7 +489,7 @@ export const RawScreenObjects = {
             {
                 id: 'left_fxcross_vert',
                 type: 'line',
-                left: -280,
+                left: -227,
                 top: 0,
                 width: 65,
                 strokeWidth: 6,
@@ -512,7 +540,6 @@ export const ScreenObjects = {
                     messageHandlers: oMsgHandlers,
                     content: oContent,
                     plugins: oPlugins,
-                    debug: oPlugins.length==2 ? true : false,
                 }),
                 feedback_screen: function(
                     addContents=[],
@@ -761,7 +788,9 @@ export const Screens = {
                 RawScreenObjects.zilnarolbar.contents.answer_labels.zilnar_buttonlabel,
                 RawScreenObjects.zilnarolbar.contents.answer_labels.olbar_buttonlabel,
                 RawScreenObjects.zilnarolbar.contents.object.ellipse_template,
-                RawScreenObjects.zilnarolbar.contents.object.rectangle_template
+                RawScreenObjects.zilnarolbar.contents.object.rectangle_template,
+                RawScreenObjects.zilnarolbar.contents.object.subj_bg_square,
+                RawScreenObjects.zilnarolbar.contents.object.subj_image_center,
             ],
             RawScreenObjects.zilnarolbar.properties.responses,
             'zilnarolbar_learning',
@@ -799,8 +828,11 @@ export const Screens = {
         ),
         zilnarolbar_learning: ScreenObjects.templates.generic.canvas.feedback_screen(
             [
+                RawScreenObjects.zilnarolbar.contents.object.white_stripe,
                 RawScreenObjects.zilnarolbar.contents.object.ellipse_template,
                 RawScreenObjects.zilnarolbar.contents.object.rectangle_template,
+                RawScreenObjects.zilnarolbar.contents.object.subj_bg_square,
+                RawScreenObjects.zilnarolbar.contents.object.subj_image_center,
             ],
             [
                 new Handlers.classes.UpdaterSetup({

@@ -6,8 +6,8 @@ import { Revision } from "./Handlers.js";
 Revision.ConceptualModel = {
     major: 0,
     minor: 0,
-    rev: 40,
-    timestamp: '2021-08-13 6:11PM',
+    rev: 43,
+    timestamp: '2021-08-14 10:07PM',
 };
 
 
@@ -203,8 +203,8 @@ export const ModelSpec = {
                     id: 'horizontal-movement',
                     type: 'Linear',
                     duration: 500,
-                    start: -250,
-                    end: 250,
+                    start: -218,
+                    end: 307,
                 },
                 top: {
                     id: 'vertical-movement',
@@ -220,8 +220,8 @@ export const ModelSpec = {
                     id: 'horizontal-movement',
                     type: 'Linear',
                     duration: 500,
-                    start: -250,
-                    end: 250,
+                    start: -179,
+                    end: 346,
                 },
             },
         },
