@@ -1,13 +1,35 @@
-import "./lib/lab.js";
-import "./lib/lab.fallback.js";
+import "./extlib/lab.js.js";
+import "./extlib/lab.fallback.js.js";
 import { Handlers, Revision } from "./Handlers.js";
-import { move, MoveLab } from "./plugins/move.lab.mjs";
+import { move, MoveLab } from "./extlib/move.lab.mjs";
 
 Revision.ScreenObjects = {
     major: 0,
-    minor: 3,
+    minor: 4,
     rev: 46,
     timestamp: '2021-08-14 10:04PM',
+};
+
+String.prototype.fillTemplate = function(pars) {
+    var fillTemplate;
+    const keys = Object.keys(pars);
+    const values = Object.values(pars);
+    fillTemplate = new Function(...keys, `return \`${this}\`;`);
+    return fillTemplate(...values);
+};
+
+Object.prototype.getParam = function(paramS) {
+    var pars = '${'.concat(
+        paramS,
+        '}'
+    );
+    try {
+        return pars.fillTemplate(this);
+    }
+    catch(e) {
+        return '';
+    }
+    //var ret = `${this.paramS}`;
 };
  
 export const RawScreenObjects = {
@@ -79,6 +101,28 @@ export const RawScreenObjects = {
                     width: 300,
                     angle: 0,
                     label: 'right'
+                },
+            },
+            dynamic_answer_labels: {
+                ZWN_frame: {
+                    id: 'ZWN_label', //left
+                    type: 'i-text',
+                    left: -350,
+                    top: 135,
+                    fontSize: 20,
+                    text: '${parameters.data.label[0]}',
+                    fill: '#000000',
+                    stroke: '#000000',
+                },
+                OTB_frame: {
+                    id: 'OTB_label', //right
+                    type: 'i-text',
+                    left: 350,
+                    top: 135,
+                    fontSize: 20,
+                    text: '${parameters.data.label[1]}',
+                    fill: '#000000',
+                    stroke: '#000000',
                 },
             },
             feedback_screen: {
@@ -298,10 +342,14 @@ export const RawScreenObjects = {
                     type: 'rect',
                     left: 0,
                     top: 0,
-                    width: '${ parameters.data.image.width - 1 }',
+                    width: '${parameters.data.image.width}', /*
+                    '${parameters.data.blanked_data[\'image\'][\'width\'] - 1}', /*''.concat(
+                        '${ parameters.data.blanked_data.image === undefined ?',
+                        '0 : parameters.data.blanked_data.image.width - 1 }'
+                    ),*/
                     height: '${ parameters.data.image.height - 1 }',
                     fill: '${parameters.data.colorRgbHex}',
-                    //angle: 45+90,
+                    //angle: 45+90, 
                 },
             },
         },
@@ -442,9 +490,9 @@ export const RawScreenObjects = {
                 updaters: { // TODO: Maybe remove it later
                     angle: {
                         type: 'Linear',
-                        duration: 500,
+                        duration: 400,
                         start: 0,
-                        end: 630,
+                        end: 450,
                     },
                 },
             },
@@ -460,9 +508,9 @@ export const RawScreenObjects = {
                 updaters: { // TODO: Maybe remove it later
                     angle: {
                         type: 'Linear',
-                        duration: 500,
+                        duration: 400,
                         start: 90,
-                        end: 720,
+                        end: 540,
                     },
                 },
             },
@@ -480,9 +528,9 @@ export const RawScreenObjects = {
                 updaters: { // TODO: Maybe remove it later
                     angle: {
                         type: 'Linear',
-                        duration: 500,
+                        duration: 400,
                         start: 0,
-                        end: 630,
+                        end: 450,
                     },
                 },
             },
@@ -498,14 +546,169 @@ export const RawScreenObjects = {
                 updaters: { // TODO: Maybe remove it later
                     angle: {
                         type: 'Linear',
-                        duration: 500,
+                        duration: 400,
                         start: 90,
-                        end: 720,
+                        end: 540,
                     },
                 },
             },
         ],
+        dynamic: [
+            {
+                id: 'dyn_fxcross_horiz',
+                type: 'line',
+                left: '${parameters.data.position.x}',
+                top: '${parameters.data.position.y}',
+                width: 65,
+                strokeWidth: 6,
+                angle: 0,
+                stroke: "#fcbb0a",
+                /*updaters: { // TODO: Maybe remove it later
+                    angle: {
+                        type: 'Linear',
+                        duration: 400,
+                        start: 0,
+                        end: 450,
+                    },
+                },*/
+            },
+            {
+                id: 'dyn_fxcross_vert',
+                type: 'line',
+                left: '${parameters.data.position.x}',
+                top: '${parameters.data.position.y}',
+                width: 65,
+                strokeWidth: 6,
+                angle: 90,
+                stroke: "#fcbb0a",
+                /*updaters: { // TODO: Maybe remove it later
+                    angle: {
+                        type: 'Linear',
+                        duration: 400,
+                        start: 90,
+                        end: 540,
+                    },
+                },*/
+            },
+        ],
     },
+    trial: {
+        contents:{
+            object: {
+                nb_ellipse_template: {
+                    id: 'Object_p1',
+                    type: 'ellipse',
+                    left: 0,
+                    top: 0,
+                    width: '${parameters.data.getParam("blanked_data.ellipseWidth")}', //changed from fixed 140
+                    height: 20,
+                    //strokeWidth: 1,
+                    stroke: 'rgb(255,255,255)',
+                    fill: 'black',
+                    angle: 45
+                },
+                nb_rectangle_template: {
+                    id: 'Object_p2',
+                    type: 'rect', //rectangle
+                    left: 0,
+                    top: 0,
+                    width: '${parameters.data.getParam("blanked_data.rectangleWidth")}',
+                    height: '25',
+                    fill: 'black',
+                    angle: 45+90,
+                },
+                wt_image_center: {
+                    id: 'wugtug_image',
+                    type: 'image',
+                    left: 0,
+                    top: 0,
+                    src: '${parameters.data.getParam("blanked_data.image.filename")}',
+                    width: '${parameters.data.getParam("blanked_data.image.width")}',
+                    height: '${parameters.data.getParam("blanked_data.image.height")}',
+                    fill: '${parameters.data.getParam("blanked_data.colorRgbHex")}'
+                },
+                wt_bg_square: {
+                    id: 'wugtug_bg_square',
+                    type: 'rect',
+                    left: 0,
+                    top: 0,
+                    width: '${parameters.data.getParam("image.width")}', /*
+                    '${parameters.data.blanked_data[\'image\'][\'width\'] - 1}', /*''.concat(
+                        '${ parameters.data.blanked_data.image === undefined ?',
+                        '0 : parameters.data.blanked_data.image.width - 1 }'
+                    ),*/
+                    height: '${ parameters.data.getParam("blanked_data.image.height") - 1 }',
+                    fill: '${parameters.data.getParam("blanked_data.colorRgbHex")}',
+                    //angle: 45+90,
+                },
+                zo_ellipse_template: {
+                    id: 'Object_p1',
+                    type: 'ellipse',
+                    left: -199,
+                    top: 0,
+                    width: '${parameters.data.getParam("blanked_data.object.ellipseWidth")}', //changed from fixed 140
+                    height: 20,
+                    //strokeWidth: 1,
+                    stroke: 'rgb(255,255,255)',
+                    fill: 'black',
+                    angle: 45,
+                },
+                zo_rectangle_template: {
+                    id: 'Object_p2',
+                    type: 'rect', //rectangle
+                    left: -199,
+                    top: 0,
+                    width: '${parameters.data.getParam("blanked_data.object.rectangleWidth")}',
+                    height: '25',
+                    fill: 'black',
+                    angle: 45+90,
+                },
+                /*white_stripe: {
+                    id: 'white_stripe',
+                    type: 'rect',
+                    left: 0,
+                    top: 0,
+                    width: 800,
+                    height: 350,
+                    fill: '#ffffff',
+                },*/ //remove if you can use the existing
+                zo_subj_image_center: {
+                    id: 'zo_wugtug_image',
+                    type: 'image',
+                    left: -306,
+                    top: 0,
+                    src: '${parameters.data.getParam("blanked_data.subject.image.filename")}',
+                    width: '${parameters.data.getParam("blanked_data.subject.image.width")}',
+                    height: '${parameters.data.getParam("blanked_data.subject.image.height")}',
+                    fill: '${parameters.data.getParam("blanked_data.subject.colorRgbHex")}'
+                },
+                zo_subj_bg_square: {
+                    id: 'zo_wugtug_bg_square',
+                    type: 'rect',
+                    left: -306,
+                    top: 0,
+                    width: '${parameters.data.getParam("blanked_data.subject.image.width") - 1}',
+                    height: '${parameters.data.getParam("blanked_data.subject.image.height") - 1}',
+                    fill: '${parameters.data.getParam("blanked_data.subject.colorRgbHex")}',
+                    //angle: 45+90,
+                },
+                fill_blank_sentence: {
+                    id: 'fill_blank_sentence',
+                    type: 'i-text',
+                    //
+                    left: 0,
+                    top: 80,
+                    fontSize: 26,
+                    text: '${parameters.data.sentence.blank}',
+                    fill: '#000000',
+                    stroke: '#000000',
+                },
+            },
+        },
+        properties: {
+            
+        },
+    }
 };
 
 export const ScreenObjects = {
@@ -515,13 +718,16 @@ export const ScreenObjects = {
                 canvas: (
                     oContent=RawScreenObjects.fxcross.center,
                     oTitle='fxcross',
+                    oPlugins=[],
                     oTimeout=500
                 ) => new lab.canvas.Screen({
                     title: oTitle,
                     datacommit: false,
                     timeout: oTimeout,
+                    scrollTop: true,
                     viewport: [800, 600],
                     content: oContent,
+                    plugins: oPlugins,
                 }),
             },
             canvas: {
@@ -536,6 +742,7 @@ export const ScreenObjects = {
                     title: oTitle,
                     timeout: oTimeout,
                     viewport: [800, 600],
+                    scrollTop: true,
                     responses: oResponses,
                     messageHandlers: oMsgHandlers,
                     content: oContent,
@@ -569,6 +776,7 @@ export const ScreenObjects = {
                         responses: RawScreenObjects.generic.responses.standard_noninput,
                         tardy: true,
                         datacommit: false,
+                        scrollTop: true,
                         parameters: { //provides default values
                             bgColor: 'black',
                             fgColor: 'white',
@@ -632,8 +840,10 @@ export const ScreenObjects = {
                     oTemplate,
                     oParameters,
                     oShuffle=true,
+                    nSize=0,
                     oTitle='unamed_loop',
-                    oPlugins=[]
+                    oPlugins=[],
+                    sampleMode='draw'
                 ) => new lab.flow.Loop({
                     title: oTitle,
                     template: oTemplate,
@@ -641,6 +851,10 @@ export const ScreenObjects = {
                     shuffle: oShuffle,
                     parameters: {},
                     plugins: oPlugins,
+                    sample: {
+                        n: nSize,
+                        mode: sampleMode,
+                    },
                 }),
             }
         },
@@ -661,6 +875,7 @@ export const ScreenObjects = {
                 title: 'stimulusScreen_namubonho',
                 timeout: 5000,
                 viewport: [800, 600],
+                scrollTop: true,
                 responses: RawScreenObjects.namubonho.properties.responses,
                 messageHandlers: oMsgHandlers,
                 content: [
@@ -690,6 +905,7 @@ export const ScreenObjects = {
                 viewport: [800, 600],
                 responses: RawScreenObjects.generic.responses.standard_noninput,
                 tardy: true,
+                scrollTop: true,
                 datacommit: false,
                 parameters: { //provides default values
                     bgColor: 'black',
@@ -744,6 +960,10 @@ export const Screens = {
             RawScreenObjects.fxcross.left,
             'left_fxcross'
         ),
+        dynamic: ScreenObjects.templates.generic.fxcross.canvas(
+            RawScreenObjects.fxcross.dynamic,
+            'dyn_fxcross' // add MoveLab plugin again
+        ),
     },
     instruction: {
 
@@ -755,7 +975,8 @@ export const Screens = {
                     // ATTENTION: This is the #TASK
                     // messageHandlers
                     'before:prepare': 
-                        Handlers.handlers.generic.trial_before_prepare,
+                        Handlers.handlers.generic.learning_before_prepare,
+                    'after:end': Handlers.handlers.generic.increase_streaks,
                 }
             ),
         wugtug_learning: ScreenObjects.templates.generic.canvas.task_canvas(
@@ -774,7 +995,8 @@ export const Screens = {
             RawScreenObjects.wugtug.properties.responses,
             'wugtug_learning',
             {
-                'before:prepare': Handlers.handlers.generic.trial_before_prepare,
+                'before:prepare': Handlers.handlers.generic.learning_before_prepare,
+                'after:end': Handlers.handlers.generic.increase_streaks,
             } // messageHandlers
         ),
         zilnarolbar_learning: ScreenObjects.templates.generic.canvas.task_canvas(
@@ -795,7 +1017,8 @@ export const Screens = {
             RawScreenObjects.zilnarolbar.properties.responses,
             'zilnarolbar_learning',
             {
-                'before:prepare': Handlers.handlers.generic.trial_before_prepare,
+                'before:prepare': Handlers.handlers.generic.learning_before_prepare,
+                'after:end': Handlers.handlers.generic.increase_streaks,
             },
             [
                 new Handlers.classes.UpdaterSetup({
@@ -808,25 +1031,110 @@ export const Screens = {
                         'Object_p2',
                     ],
                 }),
-                new MoveLab(),
+                new MoveLab({title: 'zo_l_t'}),
+            ]
+        ),
+        association: ScreenObjects.templates.generic.canvas.task_canvas(
+            [
+                RawScreenObjects.generic.contents.left_button.aoi,
+                RawScreenObjects.generic.contents.left_button.ellipse,
+                RawScreenObjects.generic.contents.left_button.text,
+                RawScreenObjects.generic.contents.right_button.aoi,
+                RawScreenObjects.generic.contents.right_button.ellipse,
+                RawScreenObjects.generic.contents.right_button.text,
+                RawScreenObjects.generic.contents.dynamic_answer_labels.ZWN_frame,
+                RawScreenObjects.generic.contents.dynamic_answer_labels.OTB_frame,
+                RawScreenObjects.trial.contents.object.wt_bg_square,
+                RawScreenObjects.trial.contents.object.nb_ellipse_template,
+                RawScreenObjects.trial.contents.object.nb_rectangle_template,
+                RawScreenObjects.trial.contents.object.wt_bg_square,
+                RawScreenObjects.trial.contents.object.zo_ellipse_template,
+                RawScreenObjects.trial.contents.object.zo_rectangle_template,
+                RawScreenObjects.trial.contents.object.zo_subj_bg_square,
+                RawScreenObjects.trial.contents.object.zo_subj_image_center,
+                RawScreenObjects.trial.contents.object.fill_blank_sentence,
+            ],
+            RawScreenObjects.zilnarolbar.properties.responses,
+            'association',
+            {
+                'before:prepare': Handlers.handlers.generic.trial_before_prepare,
+            },
+            [
+                new Handlers.classes.UpdaterSetup({
+                    title: 'association_task',
+                    installEvent: 'before:prepare',
+                    log: false,
+                    verbose: false,
+                    destinationContentIds: [
+                        'Object_p1',
+                        'Object_p2',
+                    ],
+                }),
+                new MoveLab({title: 'assoc_tsk'}),            
+            ]
+        ),
+        trial: ScreenObjects.templates.generic.canvas.task_canvas(
+            [
+                RawScreenObjects.generic.contents.left_button.aoi,
+                RawScreenObjects.generic.contents.left_button.ellipse,
+                RawScreenObjects.generic.contents.left_button.text,
+                RawScreenObjects.generic.contents.right_button.aoi,
+                RawScreenObjects.generic.contents.right_button.ellipse,
+                RawScreenObjects.generic.contents.right_button.text,
+                RawScreenObjects.generic.contents.dynamic_answer_labels.ZWN_frame,
+                RawScreenObjects.generic.contents.dynamic_answer_labels.OTB_frame,
+                RawScreenObjects.trial.contents.object.wt_bg_square,
+                RawScreenObjects.trial.contents.object.nb_ellipse_template,
+                RawScreenObjects.trial.contents.object.nb_rectangle_template,
+                RawScreenObjects.trial.contents.object.wt_bg_square,
+                RawScreenObjects.trial.contents.object.zo_ellipse_template,
+                RawScreenObjects.trial.contents.object.zo_rectangle_template,
+                RawScreenObjects.trial.contents.object.zo_subj_bg_square,
+                RawScreenObjects.trial.contents.object.zo_subj_image_center,
+                RawScreenObjects.trial.contents.object.fill_blank_sentence,
+            ],
+            RawScreenObjects.zilnarolbar.properties.responses,
+            'trial',
+            {
+                'before:prepare': Handlers.handlers.generic.trial_before_prepare,
+            },
+            [
+                new Handlers.classes.UpdaterSetup({
+                    title: 'trial_task',
+                    installEvent: 'before:prepare',
+                    log: false,
+                    verbose: false,
+                    destinationContentIds: [
+                        'Object_p1',
+                        'Object_p2',
+                    ],
+                }),
+                new MoveLab({title: 'trial_task'}),            
             ]
         ),
     },
     feedback: {
-        namubonho_learning: ScreenObjects.templates.namubonho.feedback_screen(
+        namubonho_learning: (nStreaks) => ScreenObjects.templates.namubonho.feedback_screen(
             {
                 //messageHandlers
                 //'show': Handlers.handlers.generic.log_handler,
                 'before:prepare': Handlers.handlers.generic.fb_before_prepare,
+                'after:end': Handlers.handlerGenerators.end_streaks(nStreaks),
             }
         ),
-        wugtug_learning: ScreenObjects.templates.generic.canvas.feedback_screen(
+        wugtug_learning: (nStreaks) => ScreenObjects.templates.generic.canvas.feedback_screen(
             [
+                RawScreenObjects.zilnarolbar.contents.object.white_stripe,
                 RawScreenObjects.wugtug.contents.object.bg_square,
                 RawScreenObjects.wugtug.contents.object.image_center,
-            ]
+            ],
+            [],
+            {
+                'before:prepare': Handlers.handlers.generic.fb_before_prepare,
+                'after:end': Handlers.handlerGenerators.end_streaks(nStreaks),
+            }
         ),
-        zilnarolbar_learning: ScreenObjects.templates.generic.canvas.feedback_screen(
+        zilnarolbar_learning: (nStreaks) => ScreenObjects.templates.generic.canvas.feedback_screen(
             [
                 RawScreenObjects.zilnarolbar.contents.object.white_stripe,
                 RawScreenObjects.zilnarolbar.contents.object.ellipse_template,
@@ -845,49 +1153,127 @@ export const Screens = {
                         'Object_p2',
                     ],
                 }),
-                new MoveLab(),
-            ]
+                new MoveLab({title: 'zo_feedback'}),
+            ],
+            {
+                'before:prepare': Handlers.handlers.generic.fb_before_prepare,
+                'after:end': Handlers.handlerGenerators.end_streaks(nStreaks),
+            }
+        ),
+        association: (nStreaks)=>ScreenObjects.templates.generic.canvas.feedback_screen(
+            [
+                RawScreenObjects.trial.contents.object.wt_bg_square,
+                RawScreenObjects.trial.contents.object.nb_ellipse_template,
+                RawScreenObjects.trial.contents.object.nb_rectangle_template,
+                RawScreenObjects.trial.contents.object.wt_bg_square,
+                RawScreenObjects.trial.contents.object.zo_ellipse_template,
+                RawScreenObjects.trial.contents.object.zo_rectangle_template,
+                RawScreenObjects.trial.contents.object.zo_subj_bg_square,
+                RawScreenObjects.trial.contents.object.zo_subj_image_center,
+                RawScreenObjects.trial.contents.object.fill_blank_sentencem
+            ],
+            [
+                new Handlers.classes.UpdaterSetup({
+                    title: 'association_feedback',
+                    installEvent: 'before:prepare',
+                    log: false,
+                    verbose: false,
+                    destinationContentIds: [
+                        'Object_p1',
+                        'Object_p2',
+                    ],
+                }),
+                new MoveLab({title: 'association_feedback'}),
+            ],
+            {
+                'before:prepare': Handlers.handlers.generic.fb_before_prepare,
+            }
+        ),
+        trial: (nStreaks)=>ScreenObjects.templates.generic.canvas.feedback_screen(
+            [
+                RawScreenObjects.trial.contents.object.wt_bg_square,
+                RawScreenObjects.trial.contents.object.nb_ellipse_template,
+                RawScreenObjects.trial.contents.object.nb_rectangle_template,
+                RawScreenObjects.trial.contents.object.wt_bg_square,
+                RawScreenObjects.trial.contents.object.zo_ellipse_template,
+                RawScreenObjects.trial.contents.object.zo_rectangle_template,
+                RawScreenObjects.trial.contents.object.zo_subj_bg_square,
+                RawScreenObjects.trial.contents.object.zo_subj_image_center,
+                RawScreenObjects.trial.contents.object.fill_blank_sentencem
+            ],
+            [
+                new Handlers.classes.UpdaterSetup({
+                    title: 'trial_feedback',
+                    installEvent: 'before:prepare',
+                    log: false,
+                    verbose: false,
+                    destinationContentIds: [
+                        'Object_p1',
+                        'Object_p2',
+                    ],
+                }),
+                new MoveLab({title: 'trial_feedback'}),
+            ],
+            {
+                'before:prepare': Handlers.handlers.generic.fb_before_prepare,
+            }
         ),
     },
     sequence: {
-        namubonho_learning: undefined,
-        wugtug_learning: undefined,
-        zilnarolbar_learning: undefined,
+        namubonho_learning: (nStreaks) => ScreenObjects.templates.generic.flow.advanced_seq(
+            [ //sequence contents
+                Screens.fixcross.standard,
+                Screens.task.namubonho_learning,
+                Screens.feedback.namubonho_learning(nStreaks),
+            ],
+            'namubonho_learning', //sequence title
+            // ATTENTION: This is the #LOOP_SEQUENCE
+            {
+                //parameters
+            },
+            {
+                // messageHandlers
+            }
+        ),
+        wugtug_learning: (nStreaks) => ScreenObjects.templates.generic.flow.advanced_seq(
+            [
+                Screens.fixcross.standard,
+                Screens.task.wugtug_learning,
+                Screens.feedback.wugtug_learning(nStreaks),
+            ],
+            'wugtug_learning'
+        ),
+        zilnarolbar_learning: (nStreaks) => ScreenObjects.templates.generic.flow.advanced_seq(
+            [
+                Screens.fixcross.preanimation,
+                Screens.task.zilnarolbar_learning,
+                Screens.feedback.zilnarolbar_learning(nStreaks),
+            ],
+            'zilnarolbar_learning'
+        ),
+        association: (nStreaks) => ScreenObjects.templates.generic.flow.advanced_seq(
+            [
+                Screens.fixcross.dynamic,
+                Screens.task.association,
+                Screens.feedback.association(nStreaks),
+            ],
+            'association'
+        ),
+        trial: (nStreaks) => ScreenObjects.templates.generic.flow.advanced_seq(
+            [
+                Screens.fixcross.dynamic,
+                Screens.task.trial,
+                Screens.feedback.trial(nStreaks),
+            ],
+            'trial'
+        ),
     },
     /*loop: {
         namubonho_learning: null,
     },*/
 };
-Screens.sequence = {
-    namubonho_learning: ScreenObjects.templates.generic.flow.advanced_seq(
-        [ //sequence contents
-            Screens.fixcross.standard,
-            Screens.task.namubonho_learning,
-            Screens.feedback.namubonho_learning,
-        ],
-        'namubonho_learning', //sequence title
-        // ATTENTION: This is the #LOOP_SEQUENCE
-        {
-            //parameters
-        },
-        {
-            // messageHandlers
-        }
-    ),
-    wugtug_learning: ScreenObjects.templates.generic.flow.advanced_seq(
-        [
-            Screens.fixcross.standard,
-            Screens.task.wugtug_learning,
-            Screens.feedback.wugtug_learning,
-        ],
-        'wugtug_learning'
-    ),
-    zilnarolbar_learning: ScreenObjects.templates.generic.flow.advanced_seq(
-        [
-            Screens.fixcross.preanimation,
-            Screens.task.zilnarolbar_learning,
-            Screens.feedback.zilnarolbar_learning,
-        ],
-        'zilnarolbar_learning'
-    ),
-};
+/*Screens.sequence = {
+    namubonho_learning: 
+    wugtug_learning: ,
+    zilnarolbar_learning: ,
+};*/

@@ -1,21 +1,150 @@
+//import { ModelType, WugTug, ZilnarOlbar, ConceptualModel } from "./ConceptualModel.js";
+//import { cloneDeep } from './lib/lodash.js';
+import './extlib/lodash.js.js';
+
 export var Revision = {
     General: {},
     Handlers: {
         major: 0,
-        minor: 0,
-        rev: 35,
+        minor: 2,
+        rev: 38,
         timestamp: '2021-08-13 4:34PM',
     }
 };
+
+const loadUrlData = (url, callback, options={}) => fetch(url).then(
+    (resp) => resp.json()
+).then(
+    (resp) => callback(resp, options)
+).catch(
+    (err) => console.log(`Error fetching url=${url}. Details: `, err)
+);
+
+const loadDataArray = (classType, array, frmInitializer) => {
+    var ret = [];
+    for (let i of array) {
+        var cur = new classType(frmInitializer);
+        cur.LoadFromData(i);
+        ret.push(cur);
+    }
+    return ret;
+};
+
+function prepareData(td, CM) {
+    var ret = {
+        learning: {
+            namubonho: [],
+            wugtug: [],
+            zilnarolbar: [],
+        },
+        association: {
+            association: [],
+        },
+        trial: {
+            trial: [],
+        },
+    };
+
+    ret.learning.namubonho = loadDataArray(
+        CM.classes.NamuBonho,
+        td.learning.namubonho,
+        CM.datatypes.ModelType.RANDOM_NAMUBONHO
+    );
+    ret.learning.wugtug = loadDataArray(
+        CM.classes.WugTug,
+        td.learning.wugtug,
+        CM.datatypes.ModelType.RANDOM_WUGTUG
+    );
+    ret.learning.zilnarolbar = loadDataArray(
+        CM.classes.ZilnarOlbar,
+        td.learning.zilnarolbar,
+        CM.datatypes.ModelType.RANDOM_ZILNAROLBAR
+    );
+    ret.association.association = loadDataArray(
+        CM.classes.ZilnarOlbar,
+        td.association.association,
+        CM.datatypes.ModelType.RANDOM_ZILNAROLBAR
+    );
+    ret.trial.trial = loadDataArray(
+        CM.classes.ZilnarOlbar,
+        td.trial.trial,
+        CM.datatypes.ModelType.RANDOM_ZILNAROLBAR
+    );
+
+    return ret;
+
+//    data.trialdata
+
+}
+
 const GenerateLoopData = (n, classType, dataType) => {
     var ret = [];
     while (ret.length < n) {
-        let n = new classType(dataType);
-        ret.push(n);
+        let nObj = new classType(dataType);
+        ret.push(nObj);
         //console.log("new item=",n);
     }
     return ret;
 };
+
+const GenerateZOData = (n, CM, nb=[], wt=[], gen_wt=false, type=CM.datatypes.ModelType.UNDEFINED) => {
+    var ret = [], _wt = [];
+    var ModelType = CM.datatypes.ModelType;
+    if (!gen_wt) {
+        _wt = wt;
+    }
+
+    if ( // check if there are enough NBs and, if WTs won't be generated, check
+         // if the WTs list length matches the NBs list length
+        (!gen_wt && nb.length != wt.length) ||
+        n > nb.length
+    ) {
+        throw Error (
+            `Invalid parameters to generate ZilnarOlbars: n=${
+                n
+            }, nb.length=${
+                nb.length
+            }, wt.length=${
+                wt.length
+            }`
+        );
+    }
+
+    while (ret.length < n) {
+        let objType = type, i=ret.length;
+        if (type == ModelType.UNDEFINED) {
+            switch(nb[i].GetObjectTypeString()) {
+                case 'namu':
+                    objType = ModelType.ZILNAR;
+                    break;
+                case 'bonho':
+                    objType = ModelType.OLBAR;
+                    break;
+                default:
+                    objType = ModelType.RANDOM_ZILNAROLBAR_AMBIGUOUSOBJECTALLOWED;
+            }
+        }
+        let nZo = new CM.classes.ZilnarOlbar(
+            objType, false, _.cloneDeep(nb[i]), null
+        );
+        if (gen_wt) {
+            let wtType = ModelType.UNDEFINED;
+            if (nZo.objectType & ModelType.ZILNAR) {
+                wtType = ModelType.WUG;
+            }
+            if (nZo.objectType & ModelType.OLBAR) {
+                wtType = ModelType.TUG;
+            }
+            _wt.push(new CM.classes.WugTug(wtType));
+        }
+        //let nZo = new ZilnarOlbar(objType, false, nb[i], wt[i]);
+        nZo.subject = _wt[i];
+        ret.push(nZo);
+    }
+
+    return ret;
+};
+
 const revString = (major, minor, rev) => `${major}.${minor}.${rev}`;
 const revSet = (revInfo) => revString(
     revInfo.major, 
@@ -23,7 +152,7 @@ const revSet = (revInfo) => revString(
     revInfo.rev
 );
 
-const getObjPath = (obj, [f, ...l]) => {
+/*const getObjPath = (obj, [f, ...l]) => {
     if (obj === undefined) {
         return obj;
     }
@@ -33,7 +162,7 @@ const getObjPath = (obj, [f, ...l]) => {
     else {
         return getObjPath(obj[f], l);
     }
-};
+};*/
 
 class EventMgr {
     constructor(options={}) {
@@ -95,12 +224,12 @@ class UpdaterSetup {
     }
 
     Setup(context) {
-        console.log(
+        /*console.log(
             "UpdaterSetup::Setup()",
             "\n\tcontext=", context,
             "\n\tthis.screen=", this.screen,
             "\n\n   "
-        );
+        );*/
         
         var updaters = getObjPath(
             context.aggregateParameters,
@@ -109,18 +238,22 @@ class UpdaterSetup {
         
         var dst = [];
 
-        for (let i in this.destination) {
-            for (let j in context.options.content) {
-                if (
-                    this.destination[i] == context.options.content[j].id
+        for (let i of this.destination) {
+            for (let j of context.options.content) {
+                if (!(j instanceof Object)) continue;
+                if ( //this.destination[i] == context.options.content[j].id
+                    i == j.id
                 ) {
                     // It's a match!
+                    console.log("i=",i, ", j=", j, " destination=",
+                    this.destination,
+                ", content=",context.options.content);  
                     this.Log(
                         'info',
-                        `Setting up updater for object id=${this.destination[i].id}`,
+                        `Setting up updater for object id=${i.id}`,
                         "UpdaterSetup.Setup()"
                     );
-                    context.options.content[j].updaters = updaters;
+                    j.updaters = updaters;
                 }
             }
         }
@@ -175,8 +308,15 @@ function welcome_beforePrepare() {
     this.parameters.RevInfo = info;
 }
 
+function learning_loadParametersBeforePrepare() {
+    if (!this.aggregateParameters.hybrid) {
+        this.options.correctResponse = this.aggregateParameters.data.type;
+    }
+
+}
+
 function trial_loadParametersBeforePrepare() {
-    /*console.log(`nb: [${this.options.title}]:
+    console.log(`nb: [${this.options.title}]:
                 hybrid=${this.aggregateParameters.hybrid}
                 type=${this.aggregateParameters.data.type}
                 data=`,
@@ -184,15 +324,15 @@ function trial_loadParametersBeforePrepare() {
                 `
                 this.aggregateParameters=`,
                 this.aggregateParameters
-                );*/
+                );
                 //this=${JSON.stringify(this)}`);
     if (!this.aggregateParameters.hybrid) {
-        this.options.correctResponse = this.aggregateParameters.data.type;
+        //this.options.correctResponse = this.aggregateParameters.data.type;
     }
-    /*console.log(`nb: [${this.options.title}]:
+    console.log(`nb: [${this.options.title}]:
                 Correct response set to: [${this.options.correctResponse}]
                 this.options=`,
-                this.options);*/
+                this.options);
 }
 
 function feedback_loadParametersBeforePrepare() {
@@ -266,12 +406,40 @@ function generic_loghandler() {
     console.log("[", this.options.title, "] this.parameters=", this.parameters);
 }
 
+function setup_streaks() {
+    this.options.datastore.state.streaks = 0;
+}
+
+function increase_streaks() {
+    //console.log("state=",this.options.datastore.state);
+    if (this.options.datastore.state.correct &&
+        this.options.datastore.state.ended_on == 'response') {
+        this.options.datastore.state.streaks++;
+    }
+    else {
+        this.options.datastore.state.streaks = 0;
+    }
+}
+
+const end_streaks = (streaks_stop=-1) => function() {
+    if (this.options.datastore.state.streaks >= streaks_stop) {
+        //console.log("this=", this);
+        //this.end('complete_stream');//was causing long interruption or infloop
+        //this.parent.end('complete_stream');
+        this.parent.parent.end('complete_stream');
+        this.options.datastore.state.streaks = 0;
+    }
+};
+
 export const Handlers = {
     utils: {
         GenerateLoopData: GenerateLoopData,
         revString: revString,
         revSet: revSet,
         getObjPath: getObjPath,
+        GenerateZOData: GenerateZOData,
+        loadUrlData: loadUrlData,
+        prepareData: prepareData,
     },
     classes: {
         EventMgr: EventMgr,
@@ -288,7 +456,13 @@ export const Handlers = {
         generic: {
             log_handler: generic_loghandler,
             fb_before_prepare: feedback_loadParametersBeforePrepare,
+            learning_before_prepare: learning_loadParametersBeforePrepare,
             trial_before_prepare: trial_loadParametersBeforePrepare,
+            setup_streaks: setup_streaks,
+            increase_streaks: increase_streaks,
         },
+    },
+    handlerGenerators: {
+        end_streaks: end_streaks,
     },
 };
