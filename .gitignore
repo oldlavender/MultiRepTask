@@ -1,0 +1,12 @@
+.vscode/
+.git/
+node_modules/
+plugins/
+extlib/
+coverage/
+app/images/tug_template.png
+app/images/wug_template.png
+data/____OLD___trialdata_control.json
+data/__OLD__.data-labels-added.control.trialdata.json
+data/
+yarn.lock

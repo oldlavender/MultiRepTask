@@ -7,11 +7,14 @@
     "lib": "lib"
   },
   "dependencies": {
+    "cross-env": "^7.0.3",
     "lab.js": "^20.2.3"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "jest": "^27.0.6"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "#cross-env NODE_OPTIONS=\"--experimental-vm-modules npx jest\" jest --config=jest.config.js --verbose --watchAll"
   },
   "keywords": [
     "experiment",
