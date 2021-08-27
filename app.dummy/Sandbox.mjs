@@ -1,0 +1,2 @@
+import "@lab.dev.js";
+
