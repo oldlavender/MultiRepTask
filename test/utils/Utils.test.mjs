@@ -38,6 +38,6 @@ describe(
                 expect(combineFlags([0x01, 0x02, 0x04])).toBe(0x01|0x02|0x04);
                 expect(combineFlags([0x01])).toBe(0x01);
             }
-        )
+        );
     }
 );
