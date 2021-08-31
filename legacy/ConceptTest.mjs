@@ -1,6 +1,10 @@
 //import "./lib/lab.js";
 //import "./lib/lab.fallback.js";
-import { RawScreenObjects, ScreenObjects, Revision } from "./ScreenObjects.js";
+import "../extlib/lab.dev.js";
+import { RawScreenObjects, ScreenObjects } from "./ScreenObjects.js";
+import {Revision} from "./Handlers.js";
+
+console.log("lab=", lab);
 
 Revision.ConceptTest = {
     major: 0,
@@ -82,7 +86,7 @@ function genNamuBonho(ambiguous = false) {
     return ret;
 }
 
-var fx_cross = ScreenObjects.templates.generic.fxcross.center_canvas();
+var fx_cross = ScreenObjects.templates.generic.fxcross.canvas();
 var task_canvas = ScreenObjects.templates.namubonho.task_canvas();
 var feedback_screen = ScreenObjects.templates.namubonho.feedback_screen();
 

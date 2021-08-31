@@ -1,6 +1,6 @@
 //import { ModelType, WugTug, ZilnarOlbar, ConceptualModel } from "./ConceptualModel.js";
 //import { cloneDeep } from './lib/lodash.js';
-import './extlib/lodash.js.js';
+import '../extlib/lodash.js';
 
 export var Revision = {
     General: {},
@@ -152,7 +152,7 @@ const revSet = (revInfo) => revString(
     revInfo.rev
 );
 
-/*const getObjPath = (obj, [f, ...l]) => {
+const getObjPath = (obj, [f, ...l]) => {
     if (obj === undefined) {
         return obj;
     }
@@ -162,7 +162,7 @@ const revSet = (revInfo) => revString(
     else {
         return getObjPath(obj[f], l);
     }
-};*/
+};
 
 class EventMgr {
     constructor(options={}) {

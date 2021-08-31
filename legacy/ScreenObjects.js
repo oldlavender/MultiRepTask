@@ -1,7 +1,7 @@
-import "./extlib/lab.js.js";
-import "./extlib/lab.fallback.js.js";
+import "../extlib/lab.dev.js";
+//import "../extlib/lab.fallback.js";
 import { Handlers, Revision } from "./Handlers.js";
-import { move, MoveLab } from "./extlib/move.lab.mjs";
+import { move, MoveLab } from "../extlib/move.lab.mjs";
 
 Revision.ScreenObjects = {
     major: 0,
