@@ -1,12 +1,12 @@
-/*import {
+import {
     RawScreenObjects, 
     ScreenObjects, 
     Screens
 } from "./ScreenObjects.js";
-import "./extlib/lab.js.js";
+import "./extlib/lab.js";
 import { Revision } from "./Handlers.js";
 //import { lab } from "./lib/lab.js";
-import "./extlib/lodash.js.js";
+import "./extlib/lodash.js";
 
 Revision.ConceptualModel = {
     major: 0,
@@ -16,18 +16,14 @@ Revision.ConceptualModel = {
 };
 
 // util prototypes
-String.prototype.fillTemplate = function(pars) {
+/*String.prototype.fillTemplate = function(pars) {
     var fillTemplate;
     const keys = Object.keys(pars);
     const values = Object.values(pars);
     fillTemplate = new Function(...keys, `return \`${this}\`;`);
     return fillTemplate(...values);
-};
+};*/
 
-const s = 'baguio';
-String.prototype[s] = function([...pars]) {
-    return this.concat(pars);
-}
 
 const objectMerge = (x={}, y={}, y_pref='', sep='.', x_pref='') => {
     var ret = {};
@@ -105,7 +101,7 @@ export const ModelType = {
  * 
  * @class   RandomObjectGenerator   Manages the generation of random object specs
  * 
- *//*
+ */
  export class RandomObjectGenerator {
     constructor(min=0, 
                 max=0, 
@@ -375,7 +371,7 @@ export class BaseModel {
      * @summary             Sets hybrid status according to the object type
      * @param {*}   type    Specifies the model type to base the hybrid status
      * 
-     *//*
+     */
     SetHybrid(type=ModelType.UNDEFINED) {
         if (type & ModelType.HYBRID) {
             this.hybrid = true;
@@ -391,7 +387,7 @@ export class BaseModel {
      * @summary           Generates a new object with random specification
      * @param {*}   type  Specifies the model type to be generated or uses the
      *                      current model if undefined (default behavior)
-     *//*
+     */
     Generate (type=ModelType.UNDEFINED) {
         if (type != ModelType.UNDEFINED) {
             this.SetObjectType(type);
@@ -501,7 +497,7 @@ export class BaseModel {
     GenerateGrammar() {
         /*if (this.data.type == 'hybrid-namubonho') {
             console.log(".: ISSUE :.");
-        }*//*
+        }*/
         this.grammar = {
             specific: this.model.Grammar[
                 titCaseWord(this.data.type).replace(
@@ -534,14 +530,14 @@ export class BaseModel {
  * 
  * @class   NamuBonho   Models instances of Namus and Bonhos
  * 
- *//*
+ */
  export class NamuBonho extends BaseModel {
 
     /**
      * 
      * @abstract 
      * 
-     *//*
+     */
     constructor(objType = ModelType.UNDEFINED, rectWidth=-1, ellipseWidth=-1) {
         super(objType, ModelSpec.NamuBonho);
         if (rectWidth < 0 && ellipseWidth < 0) {
@@ -896,7 +892,6 @@ export class ZilnarOlbar extends BaseModel {
             bClass
         );*/ //TODO: Remove this code later
         //TODO: Separate template random selection from blank class selection
-        /*
     }
 
     AnnotateSentence(type='specific', sentence='', blank_class='') {
@@ -986,8 +981,6 @@ export class ZilnarOlbar extends BaseModel {
 
 }
 
-*/
-/*
 export var ConceptualModel = {
     datatypes: {
         ModelType: ModelType,
@@ -1004,4 +997,4 @@ export var ConceptualModel = {
         WugTug: WugTug,
         ZilnarOlbar: ZilnarOlbar,
     },
-};*/
+};

@@ -10,7 +10,7 @@ Revision.ScreenObjects = {
     timestamp: '2021-08-14 10:04PM',
 };
 
-String.prototype.fillTemplate = function(pars) {
+/*String.prototype.fillTemplate = function(pars) {
     var fillTemplate;
     const keys = Object.keys(pars);
     const values = Object.values(pars);
@@ -30,7 +30,7 @@ Object.prototype.getParam = function(paramS) {
         return '';
     }
     //var ret = `${this.paramS}`;
-};
+};*/
  
 export const RawScreenObjects = {
     generic: {
@@ -152,7 +152,7 @@ export const RawScreenObjects = {
                     top: "${0+65+(-parameters.screenHeight/2)}",
                     fontSize: 20,
                     textAlign: 'left',
-                    text: "A sua resposta ${parameters.fbStatusMessage}.",
+                    text: "A sua resposta ${parameters.fbStatusMessage}",
                     fill: "${parameters.fgColor}",
                 },
                 hint_message:{
@@ -234,6 +234,7 @@ export const RawScreenObjects = {
                 'keypress(Right)': 'continue',
                 'click #continue': 'continue',
                 'click #space': 'continue',
+		'keypress(a)': '__TAG__',
             },
         },
     },
@@ -295,6 +296,7 @@ export const RawScreenObjects = {
             responses: {
                 'keypress(d)': 'namu',
                 'keypress(f)': 'bonho',
+		'keypress(a)': '__TAG__',
                 // DISABLED: used for mobile, but mobile was deactivated for
                 // accuracy reasons (it didn't precisely registered RTs)
                 //'click @left': 'namu',
@@ -342,12 +344,8 @@ export const RawScreenObjects = {
                     type: 'rect',
                     left: 0,
                     top: 0,
-                    width: '${parameters.data.image.width}', /*
-                    '${parameters.data.blanked_data[\'image\'][\'width\'] - 1}', /*''.concat(
-                        '${ parameters.data.blanked_data.image === undefined ?',
-                        '0 : parameters.data.blanked_data.image.width - 1 }'
-                    ),*/
-                    height: '${ parameters.data.image.height - 1 }',
+                    width: '${parameters.data.image.width-1}', 
+                    height: '${ parameters.data.image.height - 2 }',
                     fill: '${parameters.data.colorRgbHex}',
                     //angle: 45+90, 
                 },
@@ -358,6 +356,7 @@ export const RawScreenObjects = {
             responses: {
                 'keypress(d)': 'wug',
                 'keypress(f)': 'tug',
+		'keypress(a)': '__TAG__',
                 // DISABLED: used for mobile, but mobile was deactivated for
                 // accuracy reasons (it didn't precisely registered RTs)
                 //'click @left': 'namu',
@@ -469,6 +468,7 @@ export const RawScreenObjects = {
             responses: {
                 'keypress(d)': 'zilnar',
                 'keypress(f)': 'olbar',
+		'keypress(a)': '__TAG__',
                 // DISABLED: used for mobile, but mobile was deactivated for
                 // accuracy reasons (it didn't precisely registered RTs)
                 //'click @left': 'zilnar',
@@ -600,7 +600,7 @@ export const RawScreenObjects = {
                     type: 'ellipse',
                     left: 0,
                     top: 0,
-                    width: '${parameters.data.getParam("blanked_data.ellipseWidth")}', //changed from fixed 140
+                    width: '${parameters?.data?.ellipseWidth}', //changed from fixed 140
                     height: 20,
                     //strokeWidth: 1,
                     stroke: 'rgb(255,255,255)',
@@ -612,7 +612,7 @@ export const RawScreenObjects = {
                     type: 'rect', //rectangle
                     left: 0,
                     top: 0,
-                    width: '${parameters.data.getParam("blanked_data.rectangleWidth")}',
+                    width: '${parameters.data?.rectangleWidth}',
                     height: '25',
                     fill: 'black',
                     angle: 45+90,
@@ -622,23 +622,19 @@ export const RawScreenObjects = {
                     type: 'image',
                     left: 0,
                     top: 0,
-                    src: '${parameters.data.getParam("blanked_data.image.filename")}',
-                    width: '${parameters.data.getParam("blanked_data.image.width")}',
-                    height: '${parameters.data.getParam("blanked_data.image.height")}',
-                    fill: '${parameters.data.getParam("blanked_data.colorRgbHex")}'
+                    src: '${parameters.data?.image?.filename}',
+                    width: '${parameters.data?.image?.width}',
+                    height: '${parameters.data?.image?.height}',
+                    fill: '${parameters.data?.colorRgbHex}'
                 },
                 wt_bg_square: {
                     id: 'wugtug_bg_square',
                     type: 'rect',
                     left: 0,
                     top: 0,
-                    width: '${parameters.data.getParam("image.width")}', /*
-                    '${parameters.data.blanked_data[\'image\'][\'width\'] - 1}', /*''.concat(
-                        '${ parameters.data.blanked_data.image === undefined ?',
-                        '0 : parameters.data.blanked_data.image.width - 1 }'
-                    ),*/
-                    height: '${ parameters.data.getParam("blanked_data.image.height") - 1 }',
-                    fill: '${parameters.data.getParam("blanked_data.colorRgbHex")}',
+                    width: '${parameters.data?.image?.width -2}', 
+                    height: '${ parameters.data?.image?.height - 2}',
+                    fill: '${parameters.data?.colorRgbHex}',
                     //angle: 45+90,
                 },
                 zo_ellipse_template: {
@@ -646,7 +642,7 @@ export const RawScreenObjects = {
                     type: 'ellipse',
                     left: -199,
                     top: 0,
-                    width: '${parameters.data.getParam("blanked_data.object.ellipseWidth")}', //changed from fixed 140
+                    width: '${parameters.data?.object?.ellipseWidth}', //changed from fixed 140
                     height: 20,
                     //strokeWidth: 1,
                     stroke: 'rgb(255,255,255)',
@@ -658,51 +654,54 @@ export const RawScreenObjects = {
                     type: 'rect', //rectangle
                     left: -199,
                     top: 0,
-                    width: '${parameters.data.getParam("blanked_data.object.rectangleWidth")}',
+                    width: '${parameters.data?.object?.rectangleWidth}',
                     height: '25',
                     fill: 'black',
                     angle: 45+90,
                 },
-                /*white_stripe: {
-                    id: 'white_stripe',
-                    type: 'rect',
-                    left: 0,
-                    top: 0,
-                    width: 800,
-                    height: 350,
-                    fill: '#ffffff',
-                },*/ //remove if you can use the existing
                 zo_subj_image_center: {
                     id: 'zo_wugtug_image',
                     type: 'image',
                     left: -306,
                     top: 0,
-                    src: '${parameters.data.getParam("blanked_data.subject.image.filename")}',
-                    width: '${parameters.data.getParam("blanked_data.subject.image.width")}',
-                    height: '${parameters.data.getParam("blanked_data.subject.image.height")}',
-                    fill: '${parameters.data.getParam("blanked_data.subject.colorRgbHex")}'
+                    src: '${parameters.data?.subject?.image?.filename}',
+                    width: '${parameters.data?.subject?.image?.width}',
+                    height: '${parameters.data?.subject?.image?.height}',
+                    fill: '${parameters.data?.subject?.colorRgbHex}'
                 },
                 zo_subj_bg_square: {
                     id: 'zo_wugtug_bg_square',
                     type: 'rect',
                     left: -306,
                     top: 0,
-                    width: '${parameters.data.getParam("blanked_data.subject.image.width") - 1}',
-                    height: '${parameters.data.getParam("blanked_data.subject.image.height") - 1}',
-                    fill: '${parameters.data.getParam("blanked_data.subject.colorRgbHex")}',
+                    width: '${parameters.data?.subject?.image?.width - 2}',
+                    height: '${parameters.data?.subject?.image?.height - 2}',
+                    fill: '${parameters.data?.subject?.colorRgbHex}',
                     //angle: 45+90,
                 },
                 fill_blank_sentence: {
                     id: 'fill_blank_sentence',
                     type: 'i-text',
                     //
-                    left: 0,
-                    top: 80,
-                    fontSize: 26,
-                    text: '${parameters.data.sentence.blank}',
+                    left: 10,
+                    top: 100,
+                    fontSize: 28,
+                    text: '${parameters.data?.sentence?.blank}',
+		    fontWeight: 'bold',
                     fill: '#000000',
                     stroke: '#000000',
                 },
+		full_sentence: {
+                    id: 'fill_blank_sentence',
+                    type: 'i-text',
+                    left: 10,
+                    top: 100,
+                    fontSize: 28,
+                    text: '${parameters.data?.sentence?.full}',
+		    //fontWeight: 'bold',
+                    fill: '#000000',
+                    stroke: '#000000',
+		},
             },
         },
         properties: {
@@ -1044,14 +1043,15 @@ export const Screens = {
                 RawScreenObjects.generic.contents.right_button.text,
                 RawScreenObjects.generic.contents.dynamic_answer_labels.ZWN_frame,
                 RawScreenObjects.generic.contents.dynamic_answer_labels.OTB_frame,
-                RawScreenObjects.trial.contents.object.wt_bg_square,
-                RawScreenObjects.trial.contents.object.nb_ellipse_template,
-                RawScreenObjects.trial.contents.object.nb_rectangle_template,
-                RawScreenObjects.trial.contents.object.wt_bg_square,
-                RawScreenObjects.trial.contents.object.zo_ellipse_template,
-                RawScreenObjects.trial.contents.object.zo_rectangle_template,
+                //RawScreenObjects.trial.contents.object.wt_bg_square,
+                //RawScreenObjects.trial.contents.object.nb_ellipse_template,
+                //RawScreenObjects.trial.contents.object.nb_rectangle_template,
+                //RawScreenObjects.trial.contents.object.wt_image_center,
+                //RawScreenObjects.zilnarolbar.contents.object.white_stripe,
                 RawScreenObjects.trial.contents.object.zo_subj_bg_square,
                 RawScreenObjects.trial.contents.object.zo_subj_image_center,
+                RawScreenObjects.trial.contents.object.zo_ellipse_template,
+                RawScreenObjects.trial.contents.object.zo_rectangle_template,
                 RawScreenObjects.trial.contents.object.fill_blank_sentence,
             ],
             RawScreenObjects.zilnarolbar.properties.responses,
@@ -1083,10 +1083,10 @@ export const Screens = {
                 RawScreenObjects.generic.contents.right_button.text,
                 RawScreenObjects.generic.contents.dynamic_answer_labels.ZWN_frame,
                 RawScreenObjects.generic.contents.dynamic_answer_labels.OTB_frame,
-                RawScreenObjects.trial.contents.object.wt_bg_square,
-                RawScreenObjects.trial.contents.object.nb_ellipse_template,
-                RawScreenObjects.trial.contents.object.nb_rectangle_template,
-                RawScreenObjects.trial.contents.object.wt_bg_square,
+                //RawScreenObjects.trial.contents.object.wt_bg_square,
+                //RawScreenObjects.trial.contents.object.nb_ellipse_template,
+                //RawScreenObjects.trial.contents.object.nb_rectangle_template,
+                //RawScreenObjects.trial.contents.object.wt_bg_square,
                 RawScreenObjects.trial.contents.object.zo_ellipse_template,
                 RawScreenObjects.trial.contents.object.zo_rectangle_template,
                 RawScreenObjects.trial.contents.object.zo_subj_bg_square,
@@ -1162,15 +1162,16 @@ export const Screens = {
         ),
         association: (nStreaks)=>ScreenObjects.templates.generic.canvas.feedback_screen(
             [
-                RawScreenObjects.trial.contents.object.wt_bg_square,
-                RawScreenObjects.trial.contents.object.nb_ellipse_template,
-                RawScreenObjects.trial.contents.object.nb_rectangle_template,
-                RawScreenObjects.trial.contents.object.wt_bg_square,
-                RawScreenObjects.trial.contents.object.zo_ellipse_template,
-                RawScreenObjects.trial.contents.object.zo_rectangle_template,
+                //RawScreenObjects.trial.contents.object.wt_bg_square,
+                //RawScreenObjects.trial.contents.object.nb_ellipse_template,
+                //RawScreenObjects.trial.contents.object.nb_rectangle_template,
+                //RawScreenObjects.trial.contents.object.wt_bg_square,
+                RawScreenObjects.zilnarolbar.contents.object.white_stripe,
                 RawScreenObjects.trial.contents.object.zo_subj_bg_square,
                 RawScreenObjects.trial.contents.object.zo_subj_image_center,
-                RawScreenObjects.trial.contents.object.fill_blank_sentencem
+                RawScreenObjects.trial.contents.object.zo_ellipse_template,
+                RawScreenObjects.trial.contents.object.zo_rectangle_template,
+                RawScreenObjects.trial.contents.object.full_sentence,
             ],
             [
                 new Handlers.classes.UpdaterSetup({
@@ -1191,15 +1192,16 @@ export const Screens = {
         ),
         trial: (nStreaks)=>ScreenObjects.templates.generic.canvas.feedback_screen(
             [
-                RawScreenObjects.trial.contents.object.wt_bg_square,
-                RawScreenObjects.trial.contents.object.nb_ellipse_template,
-                RawScreenObjects.trial.contents.object.nb_rectangle_template,
-                RawScreenObjects.trial.contents.object.wt_bg_square,
+                //RawScreenObjects.trial.contents.object.wt_bg_square,
+                //RawScreenObjects.trial.contents.object.nb_ellipse_template,
+                //RawScreenObjects.trial.contents.object.nb_rectangle_template,
+                //RawScreenObjects.trial.contents.object.wt_bg_square,
+                RawScreenObjects.zilnarolbar.contents.object.white_stripe,
                 RawScreenObjects.trial.contents.object.zo_ellipse_template,
                 RawScreenObjects.trial.contents.object.zo_rectangle_template,
                 RawScreenObjects.trial.contents.object.zo_subj_bg_square,
                 RawScreenObjects.trial.contents.object.zo_subj_image_center,
-                RawScreenObjects.trial.contents.object.fill_blank_sentencem
+                RawScreenObjects.trial.contents.object.full_sentence,
             ],
             [
                 new Handlers.classes.UpdaterSetup({

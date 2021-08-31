@@ -1,4 +1,4 @@
-import "./extlib/lab.js.js";
+import "./extlib/lab.js";
 import { Revision, Handlers } from "./Handlers.js";
 import { ConceptualModel, NamuBonho } from "./ConceptualModel.js";
 import { ScreenObjects, Screens } from "./ScreenObjects.js";
@@ -69,7 +69,7 @@ var config = {
     loop_log: false,
     learning_trials: {
         n: 15,
-        n_streaks: 5,
+        n_streaks: 3,
     },
 };
 
@@ -110,7 +110,7 @@ function runExperiment(_data, config={}) {
         [
             new Handlers.classes.EventMgr({
                 title: 'wugtug_loop',
-                log: config.loop_log,
+                log: true //config.loop_log,
             }),
         ]
     );
@@ -133,7 +133,8 @@ function runExperiment(_data, config={}) {
         Screens.sequence.association(),
         trialdata.association.association,
         true,
-        trialdata.association.association.length,
+	10,
+        //trialdata.association.association.length,
         'association_loop',
         [
             new Handlers.classes.EventMgr({
@@ -146,7 +147,7 @@ function runExperiment(_data, config={}) {
     var loop_trial = ScreenObjects.templates.generic.flow.loop(
         Screens.sequence.trial(),
         trialdata.trial.trial,
-        trialdata.trial.trial.length,
+        10, //trialdata.trial.trial.length,
         'trial_loop',
         [
             new Handlers.classes.EventMgr({
@@ -170,12 +171,12 @@ function runExperiment(_data, config={}) {
             }),
         ],
         content: [
-            Screens.presentation.welcome,/*
-            loop_namubonho_,
-            */
-            //loop_namubonho_learning,
-            //loop_wugtug_learning,
-            //loop_zilnarolbar_learning,
+            Screens.presentation.welcome,
+            //loop_namubonho_,
+            /**/
+            loop_namubonho_learning,
+            loop_wugtug_learning,
+            loop_zilnarolbar_learning,
             loop_association,
             loop_trial,
         ],
