@@ -10,3 +10,5 @@ data/____OLD___trialdata_control.json
 data/__OLD__.data-labels-added.control.trialdata.json
 data/
 yarn.lock
+legacy/lib
+legacy/extlib
