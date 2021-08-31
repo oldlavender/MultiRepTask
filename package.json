@@ -3,18 +3,37 @@
   "version": "0.0.1",
   "description": "Experimental test for multiple cognitive representations (frames) for the same world information",
   "main": "MultiRepTest.js",
+  "type": "module",
   "directories": {
     "lib": "lib"
   },
+  "jest": {
+    "verbose": true,
+    "moduleFileExtensions": [
+      "mjs",
+      "js",
+      "jsx",
+      "ts",
+      "tsx",
+      "json",
+      "node"
+    ],
+    "roots": [
+      "<rootDir>/test/utils"
+    ]
+  },
   "dependencies": {
-    "cross-env": "^7.0.3",
+    "@babel/core": "^7.15.0",
+    "@babel/plugin-transform-modules-commonjs": "^7.15.0",
+    "babel-jest": "^27.1.0",
     "lab.js": "^20.2.3"
   },
   "devDependencies": {
-    "jest": "^27.0.6"
+    "cross-env": "^7.0.3",
+    "jest": "^27.1.0"
   },
   "scripts": {
-    "test": "#cross-env NODE_OPTIONS=\"--experimental-vm-modules npx jest\" jest --config=jest.config.js --verbose --watchAll"
+    "test": "jest --config=jest.config.cjs --verbose --watchAll"
   },
   "keywords": [
     "experiment",
