@@ -1,10 +1,10 @@
 <header class="content-vertical-center content-horizontal-center">
     <div>
-      <h1>Boas-Vindas do Experimento com Aprendizagem de Frames</h1>
+      <h1>Bem ${parameters?.lang?.vinde?.[parameters?.lang?.gender] ?? 'vinde'} ao Experimento com Aprendizagem de Frames</h1>
     </div>
 </header>
   <main>
-    <p>Ol&aacute;! Seja bem ${expconfig?.vinde?.[expconfig?.gender] ?? vinde}
+    <p>Ol&aacute;! Seja bem ${parameters?.lang?.vinde?.[parameters?.lang?.gender] ?? 'vinde'}
       ao nosso estudo experimental de aprendizagem de frames. Para saber mais
       sobre como novos conhecimentos s&atilde;o representados pela mente, 
       n&oacute;s faremos uma tarefa dividida em cinco blocos. Nos primeiro
@@ -19,6 +19,12 @@
       intervalos entre um bloco e outro, mas se necess&aacute;rio voc&ecirc; 
       tamb&eacute;m poder&aacute; fazer este intervalo nas telas de feedback, 
       exceto no &uacute;ltimo bloco. 
+    </p>
+    <p>
+      OBS: &eacute; <strong>fundamental</strong> que estas tarefas sejam feitas
+      em um <strong>computador</strong> e utilizando uma vers&atilde;o recente
+      (dos &uacute;ltimos 3 anos) do navegador de internet Google Chrome ou 
+      outro nele baseado.
     </p>
     <p>
       Informa&ccedil;&otilde;es t&eacute;cnicas:<br/>
