@@ -54,12 +54,28 @@ Revision.General.timestamp = '2021-08-14 9:01PM';
  * 
  */
 
-var condition = "control";
+var condition = "control"; //TODO: Make it random if not specified in URL
+                           // OBS: URL specification must be obscure
+var url = new URLSearchParams(window.location.search);
+const genderlang = (male, female, neutral)=>{
+    return {
+        male: male,
+        female: female,
+        neutral: neutral,
+    };
+};
+
+var lang = {
+    gender: url.get('gender'),
+    vinde: genderlang('vindo', 'vinda', 'vinde'),
+};
+console.log('genderlang(a, b, c)=', genderlang('a', 'b', 'c'));
+console.log("lang=",lang);
 
 var config = {
     mode: 'local',
     base_url: {
-        local: 'http://lab.bruno.slp/MultiRepTest/',
+        local: 'http://lab.bruno.slp/MultiRepTest/legacy/',
         public: 'https://lab.bruno.today/MultiRepTest/'
     },
     data_url: {
@@ -71,6 +87,7 @@ var config = {
         n: 15,
         n_streaks: 3,
     },
+    condition,
 };
 
 
@@ -110,7 +127,7 @@ function runExperiment(_data, config={}) {
         [
             new Handlers.classes.EventMgr({
                 title: 'wugtug_loop',
-                log: true //config.loop_log,
+                log: config.loop_log,
             }),
         ]
     );
@@ -164,6 +181,7 @@ function runExperiment(_data, config={}) {
     var experiment = new lab.flow.Sequence({
         title: 'MultiRepTest',
         datastore: new lab.data.Store(),
+        viewport: [800, 600],
         plugins: [
             new Handlers.classes.EventMgr({
                 title: 'root',
@@ -171,7 +189,9 @@ function runExperiment(_data, config={}) {
             }),
         ],
         content: [
-            Screens.presentation.welcome,
+            Screens.presentation.welcome("Pages/welcome.html", config, lang),
+            Screens.instruction.generic("Pages/instructions-1.html", config, lang),
+            Screens.instruction.generic("Pages/kbdinstructions.html", config, lang),
             //loop_namubonho_,
             /**/
             loop_namubonho_learning,

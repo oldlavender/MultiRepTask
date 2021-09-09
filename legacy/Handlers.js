@@ -1,6 +1,6 @@
 //import { ModelType, WugTug, ZilnarOlbar, ConceptualModel } from "./ConceptualModel.js";
 //import { cloneDeep } from './lib/lodash.js';
-import '../extlib/lodash.js';
+import './extlib/lodash.js';
 
 export var Revision = {
     General: {},
@@ -245,14 +245,14 @@ class UpdaterSetup {
                     i == j.id
                 ) {
                     // It's a match!
-                    console.log("i=",i, ", j=", j, " destination=",
+                    /*console.log("i=",i, ", j=", j, " destination=",
                     this.destination,
-                ", content=",context.options.content);  
-                    this.Log(
+                ", content=",context.options.content); */ 
+                    /*this.Log(
                         'info',
                         `Setting up updater for object id=${i.id}`,
                         "UpdaterSetup.Setup()"
-                    );
+                    );*/
                     j.updaters = updaters;
                 }
             }
@@ -316,7 +316,7 @@ function learning_loadParametersBeforePrepare() {
 }
 
 function trial_loadParametersBeforePrepare() {
-    console.log(`nb: [${this.options.title}]:
+    /*console.log(`nb: [${this.options.title}]:
                 hybrid=${this.aggregateParameters.hybrid}
                 type=${this.aggregateParameters.data.type}
                 data=`,
@@ -324,36 +324,42 @@ function trial_loadParametersBeforePrepare() {
                 `
                 this.aggregateParameters=`,
                 this.aggregateParameters
-                );
+                );*/
                 //this=${JSON.stringify(this)}`);
     if (!this.aggregateParameters.hybrid) {
         //this.options.correctResponse = this.aggregateParameters.data.type;
     }
-    console.log(`nb: [${this.options.title}]:
+    /*console.log(`nb: [${this.options.title}]:
                 Correct response set to: [${this.options.correctResponse}]
                 this.options=`,
-                this.options);
+                this.options);*/
 }
 
-function feedback_loadParametersBeforePrepare() {
+function feedback_loadParametersBeforePrepare(correctness=true) {
     var correct = this.options.datastore.state.correct;
     var timely = (this.options.datastore.state.ended_on == 'response');
 
     //sanity check:
-    if (!timely || this.aggregateParameters.hybrid) correct = false; 
+    //if (!timely || !correctness) correct = false; 
     // ^ this is necessary as datastore.state is keeping old data
     var score = 0;
     var status, hint, tit;
 
     //console.log('feedback_screen@before:prepare');
     //console.log('this=', this);
-    if (correct) score = score + 2;
+    if (correct && correctness) score = score + 2;
     if (timely) score = score + 1;
-    if (this.aggregateParameters.hybrid) score = score + 4;
+    if (!correctness) score = score + 4;
 
+    console.log(
+        `feedback: correct=${correct} timely=${
+            timely
+        } correctness=${correctness} score=${score}`,
+        "state=", this.options.datastore.state
+    );
     switch(score) {
         case 1: //in time but wrong
-            this.parameters.bgColor = 'orange';
+            this.parameters.bgColor = 'red';
             tit = 'RESPOSTA INCORRETA!';
             status = "está incorreta";
             hint = "Tente responder de forma mais precisa";
@@ -381,7 +387,7 @@ function feedback_loadParametersBeforePrepare() {
     }
     //console.log("score=",score);
 
-    if (!this.aggregateParameters.hybrid) {
+    if (correctness) {
         this.options.parameters.fbExpected = this.aggregateParameters.data.type;
     }
     this.options.parameters.fbTitle = tit;
@@ -400,6 +406,10 @@ function feedback_loadParametersBeforePrepare() {
 
     /*console.log("parameters=",this.options.parameters);
     console.log("datastore=",this.options.datastore);*/
+}
+
+function feedback_loadParametersBeforePrepare_nocorrection() {
+    feedback_loadParametersBeforePrepare.call(this, false);
 }
 
 function generic_loghandler() {
@@ -456,6 +466,7 @@ export const Handlers = {
         generic: {
             log_handler: generic_loghandler,
             fb_before_prepare: feedback_loadParametersBeforePrepare,
+            fb_before_prepare_nc: feedback_loadParametersBeforePrepare_nocorrection,
             learning_before_prepare: learning_loadParametersBeforePrepare,
             trial_before_prepare: trial_loadParametersBeforePrepare,
             setup_streaks: setup_streaks,

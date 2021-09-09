@@ -1,7 +1,7 @@
-import "../extlib/lab.dev.js";
+import "./extlib/lab.dev.js";
 //import "../extlib/lab.fallback.js";
 import { Handlers, Revision } from "./Handlers.js";
-import { move, MoveLab } from "../extlib/move.lab.mjs";
+import { move, MoveLab } from "./extlib/move.lab.mjs";
 
 Revision.ScreenObjects = {
     major: 0,
@@ -225,6 +225,7 @@ export const RawScreenObjects = {
                     textAlign: 'left',
                     fill: "${parameters.fgColor}",
                 },
+                nocontent: {},
             },
         },
         responses: {
@@ -940,12 +941,14 @@ export const ScreenObjects = {
 
 export const Screens = {
     presentation: {
-        welcome: ScreenObjects.templates.generic.pages.html_page(
-            "Pages/welcome.html",
+        welcome: (url, config={}, lang={}) => ScreenObjects.templates.generic.pages.html_page(
+            url,
             {
                 //parameters
                 Revision: Revision,
                 RevInfo: '',
+                config,
+                lang,
             },
             {
                 //message handlers
@@ -965,7 +968,13 @@ export const Screens = {
         ),
     },
     instruction: {
-
+        generic: (url, config, lang)=>ScreenObjects.templates.generic.pages.html_page(
+            url,
+            {
+                config,
+                lang,
+            },
+        ),
     },
     task: {
         namubonho_learning: 
@@ -1187,7 +1196,7 @@ export const Screens = {
                 new MoveLab({title: 'association_feedback'}),
             ],
             {
-                'before:prepare': Handlers.handlers.generic.fb_before_prepare,
+                'before:prepare': Handlers.handlers.generic.fb_before_prepare_nc,
             }
         ),
         trial: (nStreaks)=>ScreenObjects.templates.generic.canvas.feedback_screen(
@@ -1217,7 +1226,7 @@ export const Screens = {
                 new MoveLab({title: 'trial_feedback'}),
             ],
             {
-                'before:prepare': Handlers.handlers.generic.fb_before_prepare,
+                'before:prepare': Handlers.handlers.generic.fb_before_prepare_nc,
             }
         ),
     },
