@@ -8,6 +8,7 @@ module.exports = {
     moduleFileExtensions: ["js", "jsx", "mjs"],
     roots: [
       "<rootDir>/test/utils",
+      "<rootDir>/test/canvascontents",
     ],
     testEnvironment: 'jsdom',
   };
