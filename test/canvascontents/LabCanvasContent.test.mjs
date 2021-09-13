@@ -132,15 +132,16 @@ describe(
                 "so it's easier to add extra parameters"
             ),
             ()=>{
-                lcc[2].fillProperties({
+                var lcc2 = lcc[2].fillProperties({
                     angle: 150,
                     top: -300,
                     invalidproperty: 0,
                 });
-                expect(lcc[2].angle).toEqual(150);
+                expect(lcc2.angle).toEqual(150);
                 expect(lcc[2].top).toEqual(-300);
-                expect(lcc[2].hasOwnProperty('invalidproperty')).toEqual(false);
+                expect(lcc2.hasOwnProperty('invalidproperty')).toEqual(false);
                 expect(lcc[2].invalidproperty).toBeUndefined();
+                expect(lcc2).toBe(lcc[2]);
             }
         );
         test(
@@ -148,42 +149,6 @@ describe(
             ()=>{
                 lcc[3].setMandatory("peacock"); //lcc[3] is no longer complete
                 expect(lcc[3].IsComplete()).toEqual(false);
-            }
-        );
-        test(
-            "...",
-            ()=>{
-
-            }
-        );
-        test(
-            "...",
-            ()=>{
-
-            }
-        );
-        test(
-            "...",
-            ()=>{
-
-            }
-        );
-        test(
-            "...",
-            ()=>{
-
-            }
-        );
-        test(
-            "...",
-            ()=>{
-
-            }
-        );
-        test(
-            "...",
-            ()=>{
-
             }
         );
     }
