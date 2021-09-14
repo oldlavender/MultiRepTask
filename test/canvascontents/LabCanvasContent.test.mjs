@@ -151,8 +151,6 @@ describe(
             ()=>{
                 lcc[3].setMandatory("peacock"); //lcc[3] is no longer complete
                 expect(lcc[3].IsComplete()).toEqual(false);
-                expect(lcc[3].hasOwnProperty("peacock")).toEqual(true);
-            }
         );
         test(
             "setValid() must make a property or list or properties valid",
