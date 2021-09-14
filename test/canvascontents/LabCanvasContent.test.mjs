@@ -89,7 +89,9 @@ describe(
                 //   exception when setting the same property again
                 expect(
                     ()=>lcc[0].addProperty("cat", {configurable: true})
-                ).toThrow(); 
+                ).toThrowError(
+                    /.*previously set unconfigurable property.*\(id=.*\)/
+                );
                 lcc[0].addProperties("dog");
                 expect(lcc[0].hasOwnProperty('dog')).toEqual(true);
                 lcc[0].addProperties(["zebra", 'horse']);
@@ -149,6 +151,7 @@ describe(
             ()=>{
                 lcc[3].setMandatory("peacock"); //lcc[3] is no longer complete
                 expect(lcc[3].IsComplete()).toEqual(false);
+        );
         test(
             "setValid() must make a property or list or properties valid",
             ()=>{
@@ -166,6 +169,7 @@ describe(
                 expect(lcc[3].hasOwnProperty('pen')).toEqual(false);
             }
         );
+        // just finding a way to properly stage this removal
             }
         );
     }
