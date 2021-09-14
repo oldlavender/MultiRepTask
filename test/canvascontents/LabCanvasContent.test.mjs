@@ -149,6 +149,23 @@ describe(
             ()=>{
                 lcc[3].setMandatory("peacock"); //lcc[3] is no longer complete
                 expect(lcc[3].IsComplete()).toEqual(false);
+        test(
+            "setValid() must make a property or list or properties valid",
+            ()=>{
+                lcc[3].setValid(['pineapple', 'apple']);
+                lcc[3].setValid('grape');
+                lcc[3].fillProperties({
+                    pineapple: 666,
+                    apple: 666,
+                    grape: 666,
+                    pen: 666, //should be ignored
+                });
+                expect(lcc[3].pineapple).toEqual(666);
+                expect(lcc[3].apple).toEqual(666);
+                expect(lcc[3].grape).toEqual(666);
+                expect(lcc[3].hasOwnProperty('pen')).toEqual(false);
+            }
+        );
             }
         );
     }
