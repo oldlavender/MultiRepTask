@@ -24,11 +24,26 @@ describe(
                 expect(
                     ()=>new LabCanvasContent(1)
                 ).toThrowError(/.*\(\):\ ([\w]+) must be a string/);
+                var exp_mandatory = ['id', 'left', 'top', 'type'];
+                var exp_reserved = [
+                    '_properties', '_reserved', '_default', 
+                    '_mandatory', '_type', '_locked',
+                ];
+                var exp_locked = [];
                 
                 expect(lcc[0]._type).toBe("untyped");
                 expect(lcc[0]._mandatory.length).toEqual(exp_mandatory.length);
+                expect(lcc[0]._mandatory).toEqual(
+                    expect.arrayContaining(exp_mandatory)
+                );
                 expect(lcc[0]._reserved.length).toEqual(exp_reserved.length);
+                expect(lcc[0]._reserved).toEqual(
+                    expect.arrayContaining(exp_reserved)
+                );
                 expect(lcc[0]._locked.length).toEqual(exp_locked.length);
+                expect(lcc[0]._locked).toEqual(
+                    expect.arrayContaining(exp_locked)
+                );
                 // values expected to default
                 expect(lcc[0].top).toBe(0);
                 expect(lcc[0].strokeWidth).toBe(1);
@@ -151,6 +166,8 @@ describe(
             ()=>{
                 lcc[3].setMandatory("peacock"); //lcc[3] is no longer complete
                 expect(lcc[3].IsComplete()).toEqual(false);
+                expect(lcc[3].hasOwnProperty("peacock")).toEqual(true);
+            }
         );
         test(
             "setValid() must make a property or list or properties valid",
