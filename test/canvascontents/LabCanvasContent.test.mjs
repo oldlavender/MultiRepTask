@@ -170,23 +170,51 @@ describe(
             }
         );
         test(
-            "setValid() must make a property or list or properties valid",
+            "Only the appropriate properties must be enumerable",
             ()=>{
-                lcc[3].setValid(['pineapple', 'apple']);
-                lcc[3].setValid('grape');
-                lcc[3].fillProperties({
+                lcc.push(new LabCanvasContent('polygon'));
+                lcc[4].addProperties(['apple', 'pineapple']);
+                lcc[4].fillProperties({
                     pineapple: 666,
                     apple: 666,
-                    grape: 666,
                     pen: 666, //should be ignored
                 });
-                expect(lcc[3].pineapple).toEqual(666);
-                expect(lcc[3].apple).toEqual(666);
-                expect(lcc[3].grape).toEqual(666);
-                expect(lcc[3].hasOwnProperty('pen')).toEqual(false);
+                var expected_keys = [
+                    'id', 'left', 'top', 'type', // hard-coded properties
+                    'apple', 'pineapple', //the ones we added
+                ];
+
+                expect(lcc[4].pineapple).toEqual(666);
+                expect(lcc[4].apple).toEqual(666);
+                expect(lcc[4].hasOwnProperty('pen')).toEqual(false);
+                expect(Object.keys(lcc[4])).toEqual(
+                    expect.arrayContaining(expected_keys)
+                );
+                
             }
         );
-        // just finding a way to properly stage this removal
+        test(
+            "fromLabCanvasObjectTemplate method must load a ".concat(
+                "perfect copy of the argument object and throw errors when ",
+                "the argument type is not an instance of LabCanvasObject"
+            ),
+            ()=>{
+                var expected_keys = [
+                    'id', 'left', 'top', 'type', // hard-coded properties
+                    'apple', 'pineapple', //the ones we added
+                ];
+                lcc.push(new LabCanvasContent('polygon'));
+                expect(()=>lcc[5].fromLabCanvasObjectTemplate({})).toThrow(
+                    /.*fromLabCanvasObjectTemplate.*not an instance of.*/
+                );
+                expect(
+                    ()=>lcc[5].fromLabCanvasObjectTemplate(lcc[3])
+                ).toThrow(/.*Cannot.*instance of type.*into.*of type.*/);
+                expect(
+                    ()=>lcc[5].fromLabCanvasObjectTemplate(lcc[4])
+                ).not.toThrow();
+                lcc[5].fromLabCanvasObjectTemplate(lcc[4]);
+                console.log(Object.keys(lcc[4]));
             }
         );
     }
