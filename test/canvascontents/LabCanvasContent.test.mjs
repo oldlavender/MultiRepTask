@@ -27,7 +27,7 @@ describe(
                 var exp_mandatory = ['id', 'left', 'top', 'type'];
                 var exp_reserved = [
                     '_properties', '_reserved', '_default', 
-                    '_mandatory', '_type', '_locked',
+                    '_mandatory', '_type', '_locked', '_equivalence'
                 ];
                 var exp_locked = [];
                 
@@ -167,6 +167,37 @@ describe(
                 lcc[3].setMandatory("peacock"); //lcc[3] is no longer complete
                 expect(lcc[3].IsComplete()).toEqual(false);
                 expect(lcc[3].hasOwnProperty("peacock")).toEqual(true);
+            }
+        );
+        test(
+            "addEquivalence() must 'link' two objects values (metaphorically)", 
+            ()=>{
+                lcc[3].addProperties([
+                    'pigeon', 'dragon', 'bee', 'ladybug', 'fox', 'mouse'
+                ]);
+                lcc[3].addEquivalence('pigeon', ['dragon', 'bee']); //one-way
+                lcc[3].pigeon = 666;
+                expect(lcc[3].dragon).toEqual(666);
+                expect(lcc[3].bee).toEqual(666);
+                expect(lcc[3].pigeon).toEqual(666);
+                lcc[3].dragon = 555; //should not impact others
+                expect(lcc[3].dragon).toEqual(555);
+                expect(lcc[3].bee).toEqual(666);
+                expect(lcc[3].pigeon).toEqual(666);
+
+                lcc[3].addEquivalence(null, ['ladybug', 'fox', 'mouse']);
+                lcc[3].ladybug = 999; // should impact all three
+                expect(lcc[3].fox).toEqual(999);
+                expect(lcc[3].ladybug).toEqual(999);
+                expect(lcc[3].mouse).toEqual(999);
+                lcc[3].fox = 666;
+                expect(lcc[3].fox).toEqual(666);
+                expect(lcc[3].ladybug).toEqual(666);
+                expect(lcc[3].mouse).toEqual(666);
+                lcc[3].mouse = 777;
+                expect(lcc[3].fox).toEqual(777);
+                expect(lcc[3].ladybug).toEqual(777);
+                expect(lcc[3].mouse).toEqual(777);
             }
         );
         test(
