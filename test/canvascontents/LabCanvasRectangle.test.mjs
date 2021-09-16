@@ -1,9 +1,9 @@
-import { LabCanvasRectangle } from "../../lib/canvascontent/LabCanvasRectangle.mjs";
+import { LabCanvasRectangle, rect_defaults } from "../../lib/canvascontent/LabCanvasRectangle.mjs";
 
 var lcr = [];
 
 describe(
-    "",
+    "LabCanvasRectangle",
     ()=>{
         test(
             "LabCanvasRectangle constructor must set passed values or ".concat(
@@ -17,11 +17,11 @@ describe(
                 ));
                 expect(lcr[0].width).toBe(130);
                 expect(lcr[0].height).toBe(100);
-                expect(lcr[0].left).toEqual(0);
-                expect(lcr[0].top).toEqual(0);
-                expect(lcr[0].angle).toEqual(0);
-                expect(lcr[0].fill).toBe('black');
-                expect(lcr[0].id).toBe('unamed-rectangle');
+                expect(lcr[0].left).toEqual(rect_defaults.left);
+                expect(lcr[0].top).toEqual(rect_defaults.top);
+                expect(lcr[0].angle).toEqual(rect_defaults.angle);
+                expect(lcr[0].fill).toBe(rect_defaults.fill);
+                expect(lcr[0].id).toBe(rect_defaults.id);
 
                 expect(lcr[1].width).toBe(160);
                 expect(lcr[1].height).toBe(120);
