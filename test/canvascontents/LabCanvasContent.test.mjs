@@ -266,5 +266,14 @@ describe(
                 expect(lcc[4].pineapple).toEqual(666);
             }
         );
+        test(
+            "Class must work with handy 1-line construction/attribution", 
+            () => {
+                var handy1 = new LabCanvasContent("square").FromTemplate(
+                    lcc[7]
+                ).fillProperties({watermelon: 5});
+                expect(handy1.watermelon).toEqual(5);
+            }
+        );
     }
 );

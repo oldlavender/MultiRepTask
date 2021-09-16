@@ -32,3 +32,5 @@ describe(
                 expect(lcr[1].id).toBe('just-a-random-rectangle');
             }
         );
+    }
+);
