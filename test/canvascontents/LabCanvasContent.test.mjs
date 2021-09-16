@@ -201,8 +201,9 @@ describe(
             ()=>{
                 var expected_keys = [
                     'id', 'left', 'top', 'type', // hard-coded properties
-                    'apple', 'pineapple', //the ones we added
+                    'apple', 'pineapple', // the ones we added before
                 ];
+                lcc[4].reserveProperties('_test_reserved', []);
                 lcc.push(new LabCanvasContent('polygon'));
                 expect(()=>lcc[5].fromLabCanvasObjectTemplate({})).toThrow(
                     /.*fromLabCanvasObjectTemplate.*not an instance of.*/
@@ -214,7 +215,55 @@ describe(
                     ()=>lcc[5].fromLabCanvasObjectTemplate(lcc[4])
                 ).not.toThrow();
                 lcc[5].fromLabCanvasObjectTemplate(lcc[4]);
-                console.log(Object.keys(lcc[4]));
+                expect(Object.keys(lcc[5])).toEqual(
+                    expect.arrayContaining(Object.keys(lcc[4]))
+                );
+                expect(lcc[5]._reserved).toEqual(
+                    expect.arrayContaining(['_test_reserved'])
+                );
+                expect(lcc[5].pineapple).toEqual(666);
+                expect(lcc[5].apple).toEqual(666);
+            }
+        );
+        test(
+            "Method FromTemplate must load a perfect copy of".concat(
+                " the passed object with proper type validation"
+            ),
+            ()=>{
+                lcc.push(
+                    new LabCanvasContent('polygon'),
+                    new LabCanvasContent('square'),
+                );
+
+                lcc[6].FromTemplate(lcc[5]);
+                expect(Object.keys(lcc[6])).toEqual(
+                    expect.arrayContaining(Object.keys(lcc[5]))
+                );
+                
+                const badtemplate = () => lcc[7].FromTemplate(['invalid']);
+                expect(badtemplate).toThrow(/.*::FromTemplate.*Unsupp.*type.*/);
+
+                lcc[7].FromTemplate({type: 'square', watermelon: 666});
+                expect(lcc[7].watermelon).toEqual(666);
+            }
+        );
+        test(
+            "Method has() must indicate whether a property exists or not",
+            ()=>{
+                expect(lcc[4].has('pineapple')).toEqual(true);
+                expect(lcc[4].has("hfasduofasoiduhi")).toEqual(false);
+            }
+        );
+        test(
+            "Method closeProperty must set a property not ".concat(
+                "writeable, permanently or not, accordint to request"
+            ),
+            ()=>{
+                lcc[4].lockProperty("pineapple");
+                // permanent should be false by default
+                lcc[4].pineapple = 999; //should not work, the value must not
+                                        // change, but no exception is thrown
+                expect(lcc[4].pineapple).toEqual(666);
             }
         );
     }
