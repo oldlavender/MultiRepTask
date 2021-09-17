@@ -20,16 +20,17 @@ describe(
                 expect(lcr[0].left).toEqual(aoi_defaults.left);
                 expect(lcr[0].top).toEqual(aoi_defaults.top);
                 expect(lcr[0].angle).toEqual(aoi_defaults.angle);
-                expect(lcr[0].fill).toBe(aoi_defaults.fill);
                 expect(lcr[0].id).toBe(aoi_defaults.id);
+                expect(lcr[0]).not.toHaveProperty('fill');
 
                 expect(lcr[1].width).toBe(160);
                 expect(lcr[1].height).toBe(120);
                 expect(lcr[1].left).toEqual(-300);
                 expect(lcr[1].top).toEqual(10);
                 expect(lcr[1].angle).toEqual(90);
-                expect(lcr[1].fill).toBe(aoi_defaults.fill);
                 expect(lcr[1].id).toBe('just-a-random-aoi');
+                expect(lcr[1]).not.toHaveProperty('fill');
+                
             }
         );
     }

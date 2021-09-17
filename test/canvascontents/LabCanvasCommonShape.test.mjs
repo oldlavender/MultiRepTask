@@ -11,7 +11,8 @@ describe(
             ),
             ()=>{
                 lcr.push(new LabCanvasCommonShape(
-                    "square", 60, null, null, -30, 40, 0, 'orange', 'sq1', true
+                    "square", true, {}, 60, null, null, 
+                    -30, 40, 0, 'orange', 'sq1'
                 )); //must take 60 as height and width, linked
                 expect(lcr[0].type).toBe('square');
                 expect(lcr[0].width).toBe(60);
@@ -24,7 +25,8 @@ describe(
                 expect(lcr[0].id).toBe('sq1');
                 
                 lcr.push(new LabCanvasCommonShape(
-                    "circle", null, 90, null, -75, 80, 45, 'yellow', 'c1', true
+                    "circle", true, {}, null, 90, null, 
+                    -75, 80, 45, 'yellow', 'c1'
                 )); //must take 90 as height and width, linked
                 expect(lcr[1].type).toBe('circle');
                 expect(lcr[1].width).toBe(90);
@@ -37,7 +39,8 @@ describe(
                 expect(lcr[1].id).toBe('c1');
 
                 lcr.push(new LabCanvasCommonShape(
-                    "square", 40, 55, 125, -160, 180, 90, '#888844', 'sq2', true
+                    "square", true, {}, 40, 55, 125, 
+                    -160, 180, 90, '#888844', 'sq2'
                 )); //must take 40 as height and width, linked, and ignore
                 // the 55 and the 125
                 expect(lcr[2].type).toBe('square');
@@ -51,7 +54,7 @@ describe(
                 expect(lcr[2].id).toBe('sq2');
                 
                 lcr.push(new LabCanvasCommonShape(
-                    "rect", null, 60, 20 //everything else as default values
+                    "rect", false, {}, null, 60, 20//everything else as default
                 )); //equalsides defaults to false
                 expect(lcr[3].type).toBe('rect');
                 expect(lcr[3].width).toBe(60);
@@ -63,8 +66,8 @@ describe(
                 expect(lcr[3].fill).toBe(shape_defaults.fill);
                 expect(lcr[3].id).toBe(shape_defaults.id);
 
-                lcr.push(new LabCanvasCommonShape(  //must ignore the 50 and
-                    "ellipse", 50, 120, 80          // take the 120 & the 80
+                lcr.push(new LabCanvasCommonShape(    //must ignore the 50 and
+                    "ellipse", false, {}, 50, 120, 80 //take the 120 & the 80
                 )); //equalsides defaults to false 
                 expect(lcr[4].type).toBe('ellipse');
                 expect(lcr[4].width).toBe(120);
