@@ -292,7 +292,7 @@ describe(
             }
         );
         test(
-            "Method closeProperty must set a property not ".concat(
+            "Method lockProperty must set a property not ".concat(
                 "writeable, permanently or not, accordint to request"
             ),
             ()=>{
