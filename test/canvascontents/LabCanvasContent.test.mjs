@@ -27,7 +27,8 @@ describe(
                 var exp_mandatory = ['id', 'left', 'top', 'type'];
                 var exp_reserved = [
                     '_properties', '_reserved', '_default', 
-                    '_mandatory', '_type', '_locked', '_equivalence'
+                    '_mandatory', '_explicit', '_type', '_locked', 
+                    '_equivalence'
                 ];
                 var exp_locked = [];
                 
@@ -162,11 +163,16 @@ describe(
             }
         );
         test(
-            "setMandatory() must make the property mandatory",
+            "setMandatory() must make the property mandatory, and ".concat(
+                "explicitly necessary when specified."
+            ),
             ()=>{
                 lcc[3].setMandatory("peacock"); //lcc[3] is no longer complete
                 expect(lcc[3].IsComplete()).toEqual(false);
                 expect(lcc[3].hasOwnProperty("peacock")).toEqual(true);
+                lcc[2].setMandatory("lion", true);
+                lcc[2].setDefaults({lion: "rrrrowwww"});
+                expect(lcc[2].IsComplete()).toEqual(false);
             }
         );
         test(
