@@ -34,5 +34,27 @@ describe(
                 
             }
         );
+        test( //TODO: 
+            "Method FromCommonShape must produce an AOI with same config",
+            () => {
+                const test_coords = {
+                    width: 160, height: 120, left: -300, top: 10, angle: 90,
+                    color: 'orange', id: 'yet-another-random-aoi'
+                };
+                var rect = new LabCanvasRectangle(
+                    test_coords.width, test_coords.height, test_coords.left
+                ).fillProperties(test_coords);
+                lcr.push(new LabCanvasAreaOfInteraction());
+                lcr[2].FromTemplate(rect);
+                expect(lcr[2].width).toEqual(test_coords.width);
+                expect(lcr[2].height).toEqual(test_coords.height);
+                expect(lcr[2].left).toEqual(test_coords.left);
+                expect(lcr[2].top).toEqual(test_coords.top);
+                expect(lcr[2].angle).toEqual(test_coords.angle);
+                expect(lcr[2].id).toEqual(`copy_of_${test_coords.id}`);
+                expect(lcr[2]).not.toHaveProperty('fill');
+
+            }
+        );
     }
 );
