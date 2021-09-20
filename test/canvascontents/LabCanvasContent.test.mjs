@@ -292,18 +292,6 @@ describe(
                 expect(lcc[4].has("hfasduofasoiduhi")).toEqual(false);
             }
         );
-        test(
-            "Method lockProperty must set a property not ".concat(
-                "writeable, permanently or not, accordint to request"
-            ),
-            ()=>{
-                lcc[4].lockProperty("pineapple");
-                // permanent should be false by default
-                lcc[4].pineapple = 999; //should not work, the value must not
-                                        // change, but no exception is thrown
-                expect(lcc[4].pineapple).toEqual(666);
-            }
-        );
         test("LinkProperty must pair/sync a property in two objects", ()=>{
             console.log(`4: ${JSON.stringify(lcc[4], null, 0)}\n5: ${
                 JSON.stringify(lcc[5], null, 0)
@@ -321,21 +309,36 @@ describe(
             expect(lcc[6].pineapple).toEqual(7654);
             lcc[4].LinkProperty('apple', [lcc[5], lcc[6]]);
             lcc[4].apple = 1234;
-            expect(lcc[4].pineapple).toEqual(1234);
-            expect(lcc[5].pineapple).toEqual(1234);
-            expect(lcc[6].pineapple).toEqual(1234);
+            expect(lcc[4].apple).toEqual(1234);
+            expect(lcc[5].apple).toEqual(1234);
+            expect(lcc[6].apple).toEqual(1234);
             lcc[5].apple = 4321;
-            expect(lcc[4].pineapple).toEqual(1234);
-            expect(lcc[5].pineapple).toEqual(4321);
-            expect(lcc[6].pineapple).toEqual(1234);
+            expect(lcc[4].apple).toEqual(1234);
+            expect(lcc[5].apple).toEqual(4321);
+            expect(lcc[6].apple).toEqual(1234);
             lcc[6].apple = 9876;
-            expect(lcc[4].pineapple).toEqual(1234);
-            expect(lcc[5].pineapple).toEqual(4321);
-            expect(lcc[6].pineapple).toEqual(9876);
+            expect(lcc[4].apple).toEqual(1234);
+            expect(lcc[5].apple).toEqual(4321);
+            expect(lcc[6].apple).toEqual(9876);
             expect(
                 ()=>lcc[3].LinkProperty('peacock', lcc[6])
             ).toThrow(/.*Cannot link.*not present in both.*/);
+            expect(
+                ()=>lcc[6].LinkProperty('apple', {apple: 5})
+            ).toThrow(/.*Object is not.*instance of LabCanvasContent/);
         });
+        test(
+            "Method lockProperty must set a property not ".concat(
+                "writeable, permanently or not, accordint to request"
+            ),
+            ()=>{
+                lcc[4].lockProperty("pineapple");
+                // permanent should be false by default
+                lcc[4].pineapple = 999; //should not work, the value must not
+                                        // change, but no exception is thrown
+                expect(lcc[4].pineapple).toEqual(7654);
+            }
+        );
         test(
             "Class must work with handy 1-line construction/attribution", 
             () => {
