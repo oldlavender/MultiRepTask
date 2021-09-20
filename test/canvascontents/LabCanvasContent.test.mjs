@@ -28,7 +28,7 @@ describe(
                 var exp_reserved = [
                     '_properties', '_reserved', '_default', 
                     '_mandatory', '_explicit', '_type', '_locked', 
-                    '_equivalence'
+                    '_equivalence', '_externalink'
                 ];
                 var exp_locked = [];
                 
@@ -280,8 +280,9 @@ describe(
                 const badtemplate = () => lcc[7].FromTemplate(['invalid']);
                 expect(badtemplate).toThrow(/.*::FromTemplate.*Unsupp.*type.*/);
 
-                lcc[7].FromTemplate({type: 'square', watermelon: 666});
+                lcc[7].FromTemplate({type: 'square', watermelon: 666}, 'nid');
                 expect(lcc[7].watermelon).toEqual(666);
+                expect(lcc[7].id).toEqual('nid');
             }
         );
         test(
