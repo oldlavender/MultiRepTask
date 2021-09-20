@@ -304,6 +304,35 @@ describe(
                 expect(lcc[4].pineapple).toEqual(666);
             }
         );
+        test("LinkProperty must pair/sync a property in two objects", ()=>{
+            console.log(`4: ${JSON.stringify(lcc[4], null, 0)}\n5: ${
+                JSON.stringify(lcc[5], null, 0)
+            }\n6: ${JSON.stringify(lcc[6], null, 0)}`);
+            lcc[6].LinkProperty('pineapple', [lcc[4], lcc[5]], true, true);
+            expect(lcc[4].pineapple).toEqual(lcc[6].pineapple);
+            expect(lcc[5].pineapple).toEqual(lcc[6].pineapple);
+            lcc[6].pineapple = 4567;
+            expect(lcc[4].pineapple).toEqual(4567);
+            expect(lcc[5].pineapple).toEqual(4567);
+            expect(lcc[6].pineapple).toEqual(4567);
+            lcc[4].pineapple = 7654;
+            expect(lcc[4].pineapple).toEqual(7654);
+            expect(lcc[5].pineapple).toEqual(7654);
+            expect(lcc[6].pineapple).toEqual(7654);
+            lcc[4].LinkProperty('apple', [lcc[5], lcc[6]]);
+            lcc[4].apple = 1234;
+            expect(lcc[4].pineapple).toEqual(1234);
+            expect(lcc[5].pineapple).toEqual(1234);
+            expect(lcc[6].pineapple).toEqual(1234);
+            lcc[5].apple = 4321;
+            expect(lcc[4].pineapple).toEqual(1234);
+            expect(lcc[5].pineapple).toEqual(4321);
+            expect(lcc[6].pineapple).toEqual(1234);
+            lcc[6].apple = 9876;
+            expect(lcc[4].pineapple).toEqual(1234);
+            expect(lcc[5].pineapple).toEqual(4321);
+            expect(lcc[6].pineapple).toEqual(9876);
+        });
         test(
             "Class must work with handy 1-line construction/attribution", 
             () => {
