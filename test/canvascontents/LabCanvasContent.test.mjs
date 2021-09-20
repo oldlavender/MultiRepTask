@@ -332,6 +332,9 @@ describe(
             expect(lcc[4].pineapple).toEqual(1234);
             expect(lcc[5].pineapple).toEqual(4321);
             expect(lcc[6].pineapple).toEqual(9876);
+            expect(
+                ()=>lcc[3].LinkProperty('peacock', lcc[6])
+            ).toThrow(/.*Cannot link.*not present in both.*/);
         });
         test(
             "Class must work with handy 1-line construction/attribution", 
