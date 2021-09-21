@@ -436,7 +436,7 @@ const end_streaks = (streaks_stop=-1) => function() {
         //console.log("this=", this);
         //this.end('complete_stream');//was causing long interruption or infloop
         //this.parent.end('complete_stream');
-        this.parent.parent.end('complete_stream');
+        this.parent.parent.end('complete_streak');
         this.options.datastore.state.streaks = 0;
     }
 };
