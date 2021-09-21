@@ -73,10 +73,11 @@ console.log('genderlang(a, b, c)=', genderlang('a', 'b', 'c'));
 console.log("lang=",lang);
 
 var config = {
-    mode: 'local',
+    mode: 'dev',
     base_url: {
-        local: 'http://lab.bruno.slp/MultiRepTest/legacy/',
-        public: 'https://lab.bruno.today/MultiRepTest/'
+        dev: 'https://devlab.bruno.today/MultiRepTest/legacy/',
+        demo: 'https://demolab.bruno.today/MultiRepTest/legacy/',
+        public: 'https://lab.bruno.today/MultiRepTest/legacy/'
     },
     data_url: {
         control: "./data/control.trialdata.json",
