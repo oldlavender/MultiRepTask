@@ -957,14 +957,19 @@ export const Screens = {
         ),
     },
     fixcross: {
-        standard: ScreenObjects.templates.generic.fxcross.canvas(),
+        standard: ScreenObjects.templates.generic.fxcross.canvas(
+            RawScreenObjects.fxcross.center,
+            'center_fxcross',
+            [new MoveLab({id: 'dyn_fxcross_ml'})],
+        ),
         preanimation: ScreenObjects.templates.generic.fxcross.canvas(
             RawScreenObjects.fxcross.left,
             'left_fxcross'
         ),
         dynamic: ScreenObjects.templates.generic.fxcross.canvas(
             RawScreenObjects.fxcross.dynamic,
-            'dyn_fxcross' // add MoveLab plugin again
+            'dyn_fxcross', // add MoveLab plugin again
+            [new MoveLab({id: 'dyn_fxcross_ml'})],
         ),
     },
     instruction: {
