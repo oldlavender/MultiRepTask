@@ -1,4 +1,4 @@
-import { LabCanvasRectangle, rect_defaults } from "../../lib/canvascontent/LabCanvasRectangle.mjs";
+import { LabCanvasRectangle, rect_defaults } from "../../../lib/labobjects/canvascontent/LabCanvasRectangle.mjs";
 
 var lcr = [];
 

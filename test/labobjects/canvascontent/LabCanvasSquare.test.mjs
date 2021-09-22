@@ -1,4 +1,4 @@
-import { LabCanvasSquare, square_defaults } from "../../lib/canvascontent/LabCanvasSquare.mjs";
+import { LabCanvasSquare, square_defaults } from "../../../lib/labobjects/canvascontent/LabCanvasSquare.mjs";
 
 var lcr = [];
 

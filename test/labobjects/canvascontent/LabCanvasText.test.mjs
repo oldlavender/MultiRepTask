@@ -1,4 +1,4 @@
-import { LabCanvasText, text_defaults } from "../../lib/canvascontent/LabCanvasText.mjs";
+import { LabCanvasText, text_defaults } from "../../../lib/labobjects/canvascontent/LabCanvasText.mjs";
 
 var lcr = [];
 

@@ -1,4 +1,4 @@
-import { LabCanvasCommonShape, shape_defaults } from "../../lib/canvascontent/LabCanvasCommonShape.mjs";
+import { LabCanvasCommonShape, shape_defaults } from "../../../lib/labobjects/canvascontent/LabCanvasCommonShape.mjs";
 
 var lcr = [];
 

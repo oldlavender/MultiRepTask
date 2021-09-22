@@ -1,5 +1,5 @@
-import { LabCanvasAreaOfInteraction, aoi_defaults } from "../../lib/canvascontent/LabCanvasAreaOfInteraction.mjs";
-import { LabCanvasRectangle } from "../../lib/canvascontent/LabCanvasRectangle.mjs";
+import { LabCanvasAreaOfInteraction, aoi_defaults } from "../../../lib/labobjects/canvascontent/LabCanvasAreaOfInteraction.mjs";
+import { LabCanvasRectangle } from "../../../lib/labobjects/canvascontent/LabCanvasRectangle.mjs";
 
 var lcr = [];
 
@@ -12,16 +12,13 @@ describe(
                 "the mandatory parameters"
             ),
             ()=>{
-                lcr.push(new LabCanvasAreaOfInteraction(130, 100));
                 lcr.push(new LabCanvasAreaOfInteraction(
-                    160, 120, -300, 10, 90, 'just-a-random-aoi'
                 ));
                 expect(lcr[0].width).toBe(130);
                 expect(lcr[0].height).toBe(100);
                 expect(lcr[0].left).toEqual(aoi_defaults.left);
                 expect(lcr[0].top).toEqual(aoi_defaults.top);
                 expect(lcr[0].angle).toEqual(aoi_defaults.angle);
-                expect(lcr[0].id).toBe(aoi_defaults.id);
                 expect(lcr[0]).not.toHaveProperty('fill');
 
                 expect(lcr[1].width).toBe(160);
@@ -39,12 +36,10 @@ describe(
             () => {
                 const test_coords = {
                     width: 160, height: 120, left: -300, top: 10, angle: 90,
-                    color: 'orange', id: 'yet-another-random-aoi'
                 };
                 var rect = new LabCanvasRectangle(
                     test_coords.width, test_coords.height, test_coords.left
                 ).fillProperties(test_coords);
-                lcr.push(new LabCanvasAreaOfInteraction());
                 lcr[2].FromTemplate(rect);
                 expect(lcr[2].width).toEqual(test_coords.width);
                 expect(lcr[2].height).toEqual(test_coords.height);

@@ -7,8 +7,9 @@ module.exports = {
     testPathIgnorePatterns: ["<rootDir>/build/", "<rootDir>/node_modules/"],
     moduleFileExtensions: ["js", "jsx", "mjs"],
     roots: [
-      "<rootDir>/test/utils",
-      "<rootDir>/test/canvascontents",
+      "<rootDir>/test/",
+      //"<rootDir>/test/utils",
+      //"<rootDir>/test/canvascontents",
     ],
     testEnvironment: 'jsdom',
   };

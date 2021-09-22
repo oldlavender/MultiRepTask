@@ -1,5 +1,5 @@
 import { describe, expect, test } from "@jest/globals";
-import { LabCanvasContent } from "../../lib/canvascontent/LabCanvasContent.mjs";
+import { LabCanvasContent } from "../../../lib/labobjects/canvascontent/LabCanvasContent.mjs";
 
 var lcc = [];
 

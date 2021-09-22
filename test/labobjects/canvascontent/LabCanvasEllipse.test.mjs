@@ -1,4 +1,4 @@
-import { LabCanvasEllipse, ellipse_defaults } from "../../lib/canvascontent/LabCanvasEllipse.mjs";
+import { LabCanvasEllipse, ellipse_defaults } from "../../../lib/labobjects/canvascontent/LabCanvasEllipse.mjs";
 
 var lcr = [];
 
