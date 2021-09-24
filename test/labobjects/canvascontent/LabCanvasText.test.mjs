@@ -30,8 +30,12 @@ describe(
                 expect(lcr[0].textAlign).toEqual(text_defaults.textAlign);
                 expect(lcr[0].lineHeight).toEqual(text_defaults.lineHeight);
 
-                lcr.push(new LabCanvasText(t2, 'left', 16, 1.16, 'bold', 'italic', 'serif'));
+                lcr.push(new LabCanvasText(
+                    t2, -300, 100, 'left', 16, 1.16, 'bold', 'italic', 'serif'
+                ));
                 expect(lcr[1].text).toEqual(t2);
+                expect(lcr[1].left).toEqual(-300);
+                expect(lcr[1].top).toEqual(100);
                 expect(lcr[1].fontSize).toEqual(16);
                 expect(lcr[1].fontStyle).toEqual('italic');
                 expect(lcr[1].fontWeight).toEqual('bold');
