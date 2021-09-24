@@ -6,7 +6,7 @@ describe(
     "LabCanvasText",
     ()=>{
         test(
-            "LabCanvasSquareText constructor must set passed values or ".concat(
+            "LabCanvasSquare constructor must set passed values or ".concat(
                 "defaults when parameters are not passed, except for ",
                 "the mandatory parameters."
             ),
