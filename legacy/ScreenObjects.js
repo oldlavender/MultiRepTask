@@ -235,7 +235,7 @@ export const RawScreenObjects = {
                 'keypress(Right)': 'continue',
                 'click #continue': 'continue',
                 'click #space': 'continue',
-		'keypress(a)': '__TAG__',
+		        'keypress(a)': '__TAG__',
             },
         },
     },
@@ -297,7 +297,7 @@ export const RawScreenObjects = {
             responses: {
                 'keypress(d)': 'namu',
                 'keypress(f)': 'bonho',
-		'keypress(a)': '__TAG__',
+		        'keypress(a)': '__TAG__',
                 // DISABLED: used for mobile, but mobile was deactivated for
                 // accuracy reasons (it didn't precisely registered RTs)
                 //'click @left': 'namu',
@@ -357,7 +357,7 @@ export const RawScreenObjects = {
             responses: {
                 'keypress(d)': 'wug',
                 'keypress(f)': 'tug',
-		'keypress(a)': '__TAG__',
+		        'keypress(a)': '__TAG__',
                 // DISABLED: used for mobile, but mobile was deactivated for
                 // accuracy reasons (it didn't precisely registered RTs)
                 //'click @left': 'namu',
