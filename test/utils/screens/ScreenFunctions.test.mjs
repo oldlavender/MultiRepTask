@@ -65,16 +65,4 @@ describe("ScreenFunctions", ()=>{
         expect(aoi.height).toEqual(800);
         expect(circ.height).toEqual(800);
     });
-    test("The Response() function must create a response object with ".concat(
-        "the listed events pointing to the specified response label."
-    ), () => {
-        resps.push(Response("next", [
-            "keypress(Space)", "keypress(Enter)", "keypress(Right)"
-        ], Response("exit", ["click #exit", "keypress(Esc)"])));
-        expect(resps[0]["keypress(Space)"]).toEqual("next");
-        expect(resps[0]["keypress(Enter)"]).toEqual("next");
-        expect(resps[0]["keypress(Right)"]).toEqual("next");
-        expect(resps[0]["click #exit"]).toEqual("exit");
-        expect(resps[0]["keypress(Esc)"]).toEqual("exit");
-    });
 });
