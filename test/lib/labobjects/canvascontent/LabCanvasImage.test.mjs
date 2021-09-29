@@ -1,7 +1,7 @@
 import { describe, test, expect } from "@jest/globals";
 import {
     LabCanvasImage, image_defaults 
-} from "../../../lib/labobjects/canvascontent/LabCanvasImage.mjs";
+} from "../../../../lib/labobjects/canvascontent/LabCanvasImage.mjs";
 
 var lcr = [];
 

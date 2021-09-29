@@ -1,7 +1,7 @@
 import { describe, expect, test, it, jest } from "@jest/globals";
 
-import { RandomObjectGenerator } from "../../lib/utils/RandomObjectGenerator.mjs";
-import { ModelType } from "../../model/datatypes.mjs";
+import { RandomObjectGenerator } from "../../../lib/utils/RandomObjectGenerator.mjs";
+import { ModelType } from "../../../model/datatypes.mjs";
 
 
 describe(

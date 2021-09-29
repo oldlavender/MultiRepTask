@@ -1,5 +1,5 @@
-import { LabCanvasAreaOfInteraction, aoi_defaults } from "../../../lib/labobjects/canvascontent/LabCanvasAreaOfInteraction.mjs";
-import { LabCanvasRectangle } from "../../../lib/labobjects/canvascontent/LabCanvasRectangle.mjs";
+import { LabCanvasAreaOfInteraction, aoi_defaults } from "../../../../lib/labobjects/canvascontent/LabCanvasAreaOfInteraction.mjs";
+import { LabCanvasRectangle } from "../../../../lib/labobjects/canvascontent/LabCanvasRectangle.mjs";
 
 var lcr = [];
 

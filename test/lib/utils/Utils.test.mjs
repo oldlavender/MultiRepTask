@@ -1,10 +1,10 @@
 import { describe, expect, test, it, jest } from "@jest/globals";
-import { combineFlags } from "../../lib/utils/Utils.mjs";
-import { titCaseWord } from "../../lib/utils/Utils.mjs";
+import { combineFlags } from "../../../lib/utils/Utils.mjs";
+import { titCaseWord } from "../../../lib/utils/Utils.mjs";
 
 import { 
     getsub
- } from "../../lib/utils/Utils.mjs";
+ } from "../../../lib/utils/Utils.mjs";
 
 describe(
     "lib/utils/Utils.mjs",

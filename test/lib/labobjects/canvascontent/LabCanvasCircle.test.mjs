@@ -1,4 +1,4 @@
-import { LabCanvasCircle, circle_defaults } from "../../../lib/labobjects/canvascontent/LabCanvasCircle.mjs";
+import { LabCanvasCircle, circle_defaults } from "../../../../lib/labobjects/canvascontent/LabCanvasCircle.mjs";
 
 var lcr = [];
 

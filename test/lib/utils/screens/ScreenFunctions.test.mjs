@@ -1,6 +1,6 @@
 import { describe, expect, test, it, jest } from "@jest/globals";
-import { Response } from "../../../lib/utils/screen/ScreenFunctions.mjs";
-import { ScreenButton } from "../../../lib/utils/screen/ScreenFunctions.mjs";
+import { Response } from "../../../../lib/utils/screen/ScreenFunctions.mjs";
+import { ScreenButton } from "../../../../lib/utils/screen/ScreenFunctions.mjs";
 
 var sb = [];
 var circ, text, aoi;

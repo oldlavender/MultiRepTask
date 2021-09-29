@@ -1,5 +1,5 @@
 import { describe, expect, test, it, jest } from "@jest/globals";
-import { LabResponse } from "../../lib/labobjects/LabResponse.mjs";
+import { LabResponse } from "../../../lib/labobjects/LabResponse.mjs";
 
 const rtemplates = [
     {
