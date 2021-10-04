@@ -1,5 +1,5 @@
 <div align='center'>
-    <img src='docs/media/MultiRepTest-logo.png'>
+    <img src='docs/media/MultiRepTask-logo.png'>
 </div>
 
 # MultiRepTask
